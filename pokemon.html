@@ -95,8 +95,6 @@
                 pokemon_start_loading_count += pokemon_max_loading_count
                 pokemon_max_loading_count *= 2
             }
-            //非同期通信が終わってwindowはかりたい
-            scrollToBottom()
         }
     }
 
@@ -152,12 +150,19 @@
 
             // iosはバウンドするので、無難に `>=` にする
             if (scrollTop >= bottomPoint) {
+                console.log("bottom")
                 reLoading.style.display = "block"
+                //TODO イベント発火したので動的にfetch処理を動かす処理を追加する
             }
         });
     }
 
-    fetchPokemons()
+    //非同期通信が終わってwindowはかりたいからthen
+    fetchPokemons().then(() => {
+        if(pokemon_count !== -1) {
+            scrollToBottom()
+        }
+    })
     //Loading処理 https://tobiasahlin.com/spinkit/
     //
     // const script = document.createElement('script');
