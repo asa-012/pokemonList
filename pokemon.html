@@ -9,7 +9,8 @@
 <body>
 
 <!--loading-->
-<div class="sk-chase" id="loading">
+
+<div class="sk-chase" id="loading_main">
     <div class="sk-chase-dot"></div>
     <div class="sk-chase-dot"></div>
     <div class="sk-chase-dot"></div>
@@ -18,20 +19,25 @@
     <div class="sk-chase-dot"></div>
 </div>
 
+<div id="scroll_area">
 <h1>Pokedex</h1>
 <div class="poke-container" id="poke-container"></div>
+</div>
 
 <script>
+
     // 要素を取得する noneで非表示 blockで表示
     const poke_container = document.getElementById('poke-container')
-    const loading = document.getElementById('loading')
+    const mainLoading = document.getElementById('loading_main')
 
     // noneで非表示 blockで表示
     poke_container.style.display = "none"
 
     // 定数を定義
     // 表示するポケモン数
-    const pokemon_count = 250
+    const pokemon_count = 350
+    let pokemon_start_loading_count = 1;
+    let pokemon_max_loading_count = 150
 
     // カラー
     const colors = {
@@ -56,14 +62,27 @@
 
     // ポケモン取得
     const fetchPokemons = async () => {
-        for(let i = 1; i <= pokemon_count; i++) {
+        for(let i = pokemon_start_loading_count; i <= pokemon_max_loading_count; i++) {
             await getPokemon(i)
-            if(i === pokemon_count){
-                //読み込み完了時にローディング削除
-                loading.remove()
+            if (i === pokemon_max_loading_count) {
+                mainLoading.remove()
                 poke_container.style.display = "block"
             }
         }
+        //追加ローディング分岐処理
+            if(pokemon_count <= pokemon_max_loading_count){
+                //Nothing　追加ローディングなし
+            } else if(pokemon_max_loading_count * 2 > pokemon_count){
+                //300の時に190だった場合に次の追加ローディングで190まで読み込みたいから
+                pokemon_start_loading_count += pokemon_max_loading_count
+                pokemon_max_loading_count = pokemon_count
+            }else{
+                //400とかだった場合に２倍の３００まで読み込む
+                pokemon_start_loading_count += pokemon_max_loading_count
+                pokemon_max_loading_count *= 2
+            }
+            //非同期通信が終わってwindowはかりたい
+            scrollToBottom()
     }
 
     const getPokemon = async (id) => {
@@ -106,8 +125,30 @@
         poke_container.appendChild(pokemonEl)
     }
 
+    function scrollToBottom(){
+// 一番下までスクロールした時の数値を取得(window.innerHeight分(画面表示領域分)はスクロールをしないため引く)
+        const bodyHeight = document.body.clientHeight // bodyの高さを取得
+        const windowHeight = window.innerHeight // windowの高さを取得
+        const bottomPoint = bodyHeight - windowHeight
+
+        window.addEventListener('scroll', () => {
+            const scrollTop = document.documentElement.scrollTop;
+            console.log(scrollTop)
+
+            // iosはバウンドするので、無難に `>=` にする
+            if (scrollTop >= bottomPoint) {
+                console.log(bottomPoint)
+                console.log('一番下までスクロールしました');
+                console.log(bottomPoint)
+            }
+        });
+    }
+
     fetchPokemons()
     //Loading処理 https://tobiasahlin.com/spinkit/
+    //
+    // const script = document.createElement('script');
+    // document.body.appendChild(script);
 
 </script>
 </body>
