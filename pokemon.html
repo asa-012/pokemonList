@@ -22,15 +22,16 @@
 <div class="poke-container" id="poke-container"></div>
 
 <script>
-    // 要素を取得する
+    // 要素を取得する noneで非表示 blockで表示
     const poke_container = document.getElementById('poke-container')
     const loading = document.getElementById('loading')
 
+    // noneで非表示 blockで表示
+    poke_container.style.display = "none"
+
     // 定数を定義
     // 表示するポケモン数
-    const pokemon_count = 150
-    //loadingするかどうかstate 初期値 true
-    const isLoading = true
+    const pokemon_count = 250
 
     // カラー
     const colors = {
@@ -60,6 +61,7 @@
             if(i === pokemon_count){
                 //読み込み完了時にローディング削除
                 loading.remove()
+                poke_container.style.display = "block"
             }
         }
     }

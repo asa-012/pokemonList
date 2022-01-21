@@ -69,8 +69,10 @@ h1 {
 .sk-chase {
     width: 40px;
     height: 40px;
-    position: relative;
+    position: fixed;
     animation: sk-chase 2.5s infinite linear both;
+    top: 50%;
+    left: 50%;
 }
 
 .sk-chase-dot {
