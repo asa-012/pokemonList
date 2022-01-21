@@ -7,16 +7,30 @@
     <title>Pokedex</title>
 </head>
 <body>
+
+<!--loading-->
+<div class="sk-chase" id="loading">
+    <div class="sk-chase-dot"></div>
+    <div class="sk-chase-dot"></div>
+    <div class="sk-chase-dot"></div>
+    <div class="sk-chase-dot"></div>
+    <div class="sk-chase-dot"></div>
+    <div class="sk-chase-dot"></div>
+</div>
+
 <h1>Pokedex</h1>
 <div class="poke-container" id="poke-container"></div>
 
 <script>
     // 要素を取得する
     const poke_container = document.getElementById('poke-container')
+    const loading = document.getElementById('loading')
 
     // 定数を定義
     // 表示するポケモン数
-    const pokemon_count = 15
+    const pokemon_count = 150
+    //loadingするかどうかstate 初期値 true
+    const isLoading = true
 
     // カラー
     const colors = {
@@ -43,6 +57,10 @@
     const fetchPokemons = async () => {
         for(let i = 1; i <= pokemon_count; i++) {
             await getPokemon(i)
+            if(i === pokemon_count){
+                //読み込み完了時にローディング削除
+                loading.remove()
+            }
         }
     }
 
@@ -86,8 +104,8 @@
         poke_container.appendChild(pokemonEl)
     }
 
-    // ページが読み込まれた時に実行
     fetchPokemons()
+    //Loading処理 https://tobiasahlin.com/spinkit/
 
 </script>
 </body>
