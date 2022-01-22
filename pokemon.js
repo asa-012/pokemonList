@@ -139,7 +139,7 @@ function scrollToBottom(){
         }
     });
 }
-fetchPokemons()
+fetchPokemons().then(_ => {})
 
 function onClickPokemonList(){
     isPokemonListScreen = true
