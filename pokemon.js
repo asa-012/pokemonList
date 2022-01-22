@@ -34,7 +34,7 @@ let passSec = 0;
 let passageId = -1;
 const maxCountSecond = 30;
 const countUpInterval = 0.25;
-const hidePokemonSpan = 4;
+const hidePokemonSpan = 8;
 
 // カラー
 const colors = {
@@ -243,7 +243,6 @@ function showRandomImages025s(){
     //hidePokemonSpan分のindexが離れたものはhide状態にします
     if(pokemonImageIndex >= hidePokemonSpan){
         document.getElementById((pokemonImageIndex - hidePokemonSpan).toString()).remove()
-        // document.getElementById((pokemonImageIndex - hidePokemonSpan -1).toString()).remove()
     }
 
     gameField.appendChild(divPokemonRandomImage)
