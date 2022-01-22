@@ -216,8 +216,8 @@ function stopShowing() {
 function showRandomImages025s(){
     //1.fetch時に、事前にpictureUrlのリストを作っておく
     //2.idをランダムで生成する　約180匹
-    //TODO 3.ランダムで生成したidをpictureUrlのindexに指定して取り出す
-    //TODO 4.ランダムな場所に表示させる
+    //ランダムで生成したidをpictureUrlのindexに指定して取り出す
+    //ランダムな場所に表示させる
     //TODO タイマーで良いタイミングで消す　それを繰り返す
     //TODO 5.onClickでidを渡して他の変数に格納する
     //TODo 6.結果が出たらWebStorageに保存する
