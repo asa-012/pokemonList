@@ -17,7 +17,7 @@ pokeContainerBackground.style.display = "none"
 scrollAreaGameStart.style.display = "none"
 
 //backgroundを指定
-gameField.style.visibility = "hidden"
+gameField.style.display = "none"
 gameField.style.backgroundColor = '#33CC66'
 
 // 定数を定義
@@ -153,7 +153,7 @@ function onClickPokemonList(){
     isPokemonListScreen = true
     scrollAreaPokemonList.style.display = "block"
     scrollAreaGameStart.style.display = "none"
-    gameField.style.visibility = 'hidden'
+    gameField.style.display = 'none'
 }
 
 function onClickGame(){
@@ -161,11 +161,11 @@ function onClickGame(){
     isPokemonListScreen = false
     scrollAreaPokemonList.style.display = "none"
     scrollAreaGameStart.style.display = "block"
-    gameField.style.visibility = 'hidden'
+    gameField.style.display = 'none'
 }
 
 function onClickGameStart(){
     header.style.visibility = 'hidden'
     scrollAreaGameStart.style.display = 'none'
-    gameField.style.visibility = 'visible'
+    gameField.style.display = 'block'
 }
