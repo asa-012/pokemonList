@@ -28,6 +28,9 @@ let pokemonImages = []
 const maxDisplayPokemonGameCount = 90
 let displayPokemonIds = []
 let pokemonImageIndex = 0
+let clickedPokemonIds = []
+const KEY_CLICKED_POKEMON = "key_clicked_pokemon"
+let clickedPokemonOnStorage = []
 
 // 秒数カウント用変数
 let passSec = 0;
@@ -169,6 +172,7 @@ function onClickPokemonList() {
 }
 
 function onClickGame() {
+    //gameの準備はこのタイミングで行う
     header.style.visibility = 'visible'
     isPokemonListScreen = false
     scrollAreaPokemonList.style.display = "none"
@@ -192,6 +196,10 @@ function onClickGameStart() {
     startShowing()
 }
 
+function onClickPokemon(id){
+    clickedPokemonIds.push(id)
+}
+
 // 繰り返し処理の開始
 function startShowing() {
     passSec = 0; // カウンタのリセット
@@ -202,7 +210,11 @@ function showCount() {
     const restTime = maxCountSecond - passSec - 1
     if (restTime === 0) {
         /*Result画面へ*/
+        //TODO これを次の画面に表示する　結果も表示 21匹捕まえました　画像も表示　詳細はBoxをチェックしてね！
         document.getElementById("count").innerHTML = "終了";
+        //WebStorageにクリックしたポケモンのidリストを保存
+        let json = JSON.stringify(clickedPokemonIds, undefined, 1);
+        localStorage.setItem(KEY_CLICKED_POKEMON, json);
     } else {
         passSec += countUpInterval // カウントアップ
         showRandomImages025s()
@@ -216,11 +228,12 @@ function showRandomImages025s(){
     //2.idをランダムで生成する　約180匹
     //ランダムで生成したidをpictureUrlのindexに指定して取り出す
     //ランダムな場所に表示させる
-    //TODO タイマーで良いタイミングで消す　それを繰り返す
-    //TODO 5.onClickでidを渡して他の変数に格納する
+    //タイマーで良いタイミングで消す　それを繰り返す
+    //5.onClickでidを渡して他の変数に格納する
     //TODo 6.結果が出たらWebStorageに保存する
     //TODO 7.BoxボタンクリックでWebStorageに入っているidを再Fetchする
     //TODo 8.fetch処理を書き換える　できれば全fetchで表示は200くらい
+
 
     // div要素を作成
     const divPokemonRandomImage = document.createElement('div')
@@ -238,8 +251,8 @@ function showRandomImages025s(){
         const x = Math.floor(Math.random() * 94);
         const y = Math.floor(Math.random() * 94);
 
-        //box要素にimgタグを追加（乱数を代入した変数をポジションに設定）
-        divPokemonRandomImage.innerHTML = '<img id="' + pokemonImageIndex + '" src="' + displayPokemonImage + '" alt="" style="top:'+y+'%; left:'+x+'%;">'
+        //box要素にimgタグを追加（乱数を代入した変数をポジションに設定）1回しかクリックさせないためにdisabledを加えた
+        divPokemonRandomImage.innerHTML = '<img id="' + pokemonImageIndex + '" src="' + displayPokemonImage + '" onclick="onClickPokemon(pokemonImageIndex)　this.disabled" alt="" style="top:'+y+'%; left:'+x+'%;">'
     }
     //hidePokemonSpan分のindexが離れたものはhide状態にします
     if(pokemonImageIndex >= hidePokemonSpan){
