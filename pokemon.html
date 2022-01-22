@@ -29,7 +29,7 @@
     <div class="sk-chase-dot"></div>
 </div>
 
-<div id="scroll_area">
+<div id="scroll_area_pokemon_list">
 <h1>Pokedex</h1>
 <div class="poke-container" id="poke-container"></div>
     <div class="sk-chase2" id="loading_again">
@@ -43,22 +43,28 @@
     <div class="poke-container-background" id="poke-container_background"></div>
 </div>
 
+<div id="scroll_area_game">
+    <button id="start_game">ゲームスタート</button>
+</div>
+
 
 <script>
 
     // 要素を取得する noneで非表示 blockで表示
-    const scrollAreaPokemonList = document.getElementById('scroll_area')
+    const scrollAreaPokemonList = document.getElementById('scroll_area_pokemon_list')
     const pokeContainer = document.getElementById('poke-container')
     const pokeContainerBackground = document.getElementById('poke-container_background')
     const mainLoading = document.getElementById('loading_main')
     const reLoading = document.getElementById('loading_again')
 
+    const scrollAreaGame = document.getElementById('scroll_area_game')
     const buttonGame = document.getElementById('button_game')
 
     // noneで非表示 blockで表示
     pokeContainer.style.display = "none"
     reLoading.style.display = "none"
     pokeContainerBackground.style.display = "none"
+    scrollAreaGame.style.display = "none"
 
     // 定数を定義
     // 表示するポケモン数
@@ -191,11 +197,13 @@
     function onClickPokemonList(){
         isPokemonListScreen = true
         scrollAreaPokemonList.style.display = "block"
+        scrollAreaGame.style.display = "none"
     }
 
     function onClickGame(){
         isPokemonListScreen = false
         scrollAreaPokemonList.style.display = "none"
+        scrollAreaGame.style.display = "block"
     }
 
 
