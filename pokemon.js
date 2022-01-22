@@ -185,6 +185,7 @@ function onClickGameStart() {
     scrollAreaGameStart.style.display = 'none'
     gameField.style.display = 'block'
 
+    //初期化
     displayPokemonIds = []
 
     for (let i = 0;i<maxDisplayPokemonGameCount ;i++){
@@ -198,6 +199,7 @@ function onClickGameStart() {
 
 function onClickPokemon(id){
     clickedPokemonIds.push(id)
+    document.getElementById(id).style.display = "none"
 }
 
 // 繰り返し処理の開始
@@ -215,6 +217,7 @@ function showCount() {
         //WebStorageにクリックしたポケモンのidリストを保存
         let json = JSON.stringify(clickedPokemonIds, undefined, 1);
         localStorage.setItem(KEY_CLICKED_POKEMON, json);
+        passageId = -1
     } else {
         passSec += countUpInterval // カウントアップ
         showRandomImages025s()
@@ -252,11 +255,11 @@ function showRandomImages025s(){
         const y = Math.floor(Math.random() * 94);
 
         //box要素にimgタグを追加（乱数を代入した変数をポジションに設定）1回しかクリックさせないためにdisabledを加えた
-        divPokemonRandomImage.innerHTML = '<img id="' + pokemonImageIndex + '" src="' + displayPokemonImage + '" onclick="onClickPokemon(pokemonImageIndex)　this.disabled" alt="" style="top:'+y+'%; left:'+x+'%;">'
+        divPokemonRandomImage.innerHTML = '<img id="' + pokemonImageIndex + '" src="' + displayPokemonImage + '" onclick="onClickPokemon(pokemonImageIndex)" alt="" style="top:'+y+'%; left:'+x+'%;">'
     }
     //hidePokemonSpan分のindexが離れたものはhide状態にします
     if(pokemonImageIndex >= hidePokemonSpan){
-        document.getElementById((pokemonImageIndex - hidePokemonSpan).toString()).remove()
+        document.getElementById((pokemonImageIndex - hidePokemonSpan).toString()).style.display = "none"
     }
 
     gameField.appendChild(divPokemonRandomImage)
