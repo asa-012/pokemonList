@@ -5,14 +5,15 @@ const pokeContainerBackground = document.getElementById('poke-container_backgrou
 const mainLoading = document.getElementById('loading_main')
 const reLoading = document.getElementById('loading_again')
 
-const scrollAreaGame = document.getElementById('scroll_area_game')
-const buttonGame = document.getElementById('button_game')
+const scrollAreaGameStart = document.getElementById('scroll_area_game_start_screen')
+
+const header = document.getElementById('header')
 
 // noneで非表示 blockで表示
 pokeContainer.style.display = "none"
 reLoading.style.display = "none"
 pokeContainerBackground.style.display = "none"
-scrollAreaGame.style.display = "none"
+scrollAreaGameStart.style.display = "none"
 
 // 定数を定義
 // 表示するポケモン数
@@ -142,13 +143,21 @@ function scrollToBottom(){
 fetchPokemons().then(_ => {})
 
 function onClickPokemonList(){
+    //TODO この条件は全てのクリック箇所で実装すること
+    header.style.visibility = 'visible'
     isPokemonListScreen = true
     scrollAreaPokemonList.style.display = "block"
-    scrollAreaGame.style.display = "none"
+    scrollAreaGameStart.style.display = "none"
 }
 
 function onClickGame(){
+    header.style.visibility = 'visible'
     isPokemonListScreen = false
     scrollAreaPokemonList.style.display = "none"
-    scrollAreaGame.style.display = "block"
+    scrollAreaGameStart.style.display = "block"
+}
+
+function onClickGameStart(){
+    header.style.visibility = 'hidden'
+    scrollAreaGameStart.style.display = 'none'
 }

@@ -46,11 +46,11 @@ li {
 }
 
 /*game*/
-.scroll_area_game{
+.scroll_area_game_start_screen{
     margin-top: 140px;
 }
 
-.start_game {
+.button_start_game {
     display       : inline-block;
     border-radius : 4%;          /* 角丸       */
     font-size     : 30pt;        /* 文字サイズ */
@@ -66,13 +66,13 @@ li {
     margin-left: 5%;
 }
 
-.start_game :hover {
+.button_start_game :hover {
     box-shadow    : none;        /* カーソル時の影消去 */
     color         : #66ff66;     /* 背景色     */
     background    : #330033;     /* 文字色     */
 }
 
-.description_game_info {
+.description_game_detail {
     margin-left: 5%;
 }
 
