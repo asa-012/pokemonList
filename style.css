@@ -86,8 +86,8 @@ li {
 
 .game_field img {
     position: absolute;
-    width: 40px;
-    height: 40px
+    width: 120px;
+    height: 120px
 }
 
 .count {
