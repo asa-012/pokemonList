@@ -9,14 +9,12 @@
 <body>
 <header>
     <h1>
-        <a href="/">RICO NOTES</a>
+        <a href="">GET POKEMON</a>
     </h1>
     <nav class="pc-nav">
         <ul>
-            <li><a href="#">ABOUT</a></li>
-            <li><a href="#">SERVICE</a></li>
-            <li><a href="#">COMPANY</a></li>
-            <li><a href="#">CONTACT</a></li>
+            <li><a href="javascript:void(0)" id="button_pokemon_list" onclick="onClickPokemonList(); return false">POKEMON LIST</a></li>
+            <li><a href="javascript:void(0)" id="button_game" onclick="onClickGame(); return false">GAME</a></li>
         </ul>
     </nav>
 </header>
@@ -49,20 +47,25 @@
 <script>
 
     // 要素を取得する noneで非表示 blockで表示
-    const poke_container = document.getElementById('poke-container')
-    const poke_container_background = document.getElementById('poke-container_background')
+    const scrollAreaPokemonList = document.getElementById('scroll_area')
+    const pokeContainer = document.getElementById('poke-container')
+    const pokeContainerBackground = document.getElementById('poke-container_background')
     const mainLoading = document.getElementById('loading_main')
     const reLoading = document.getElementById('loading_again')
 
+    const buttonGame = document.getElementById('button_game')
+
     // noneで非表示 blockで表示
-    poke_container.style.display = "none"
+    pokeContainer.style.display = "none"
     reLoading.style.display = "none"
-    poke_container_background.style.display = "none"
+    pokeContainerBackground.style.display = "none"
 
     // 定数を定義
     // 表示するポケモン数
     let pokemon_count = 250;
     let pokemon_max_loading_count = 100;
+    let arrivedBottomPoint = false;
+    let isPokemonListScreen = true
 
     // カラー
     const colors = {
@@ -95,7 +98,7 @@
                     }
                 }else{
                     mainLoading.remove()
-                    poke_container.style.display = "block"
+                    pokeContainer.style.display = "block"
                     reLoading.style.display = "block"
                     await getPokemon(i,false)
                 }
@@ -154,9 +157,9 @@
 
         if(isShow){
             // poke_containerの子要素として追加
-            poke_container.appendChild(pokemonEl)
+            pokeContainer.appendChild(pokemonEl)
         }else{
-            poke_container_background.appendChild(pokemonEl)
+            pokeContainerBackground.appendChild(pokemonEl)
         }
 
     }
@@ -170,26 +173,31 @@
         window.addEventListener('scroll', () => {
             const scrollTop = document.documentElement.scrollTop;
             console.log(scrollTop)
-            // iosはバウンドするので、無難に `>=` にする ローディングが複数回行われないように-1を設定
-            if (scrollTop >= bottomPoint && bottomPoint !== -1) {
+            //一番下にスクロール&&1回でも一番下にスクロールしたか&今の画面がpokemonListかどうか
+            if (scrollTop >= bottomPoint && !arrivedBottomPoint && isPokemonListScreen) {
                 console.log("bottom")
                 //TODO イベント発火したので動的にfetch処理を動かす処理を追加する
                //一番下にスクロールした時に5秒ローディング
                 setTimeout(function() {
-                    poke_container_background.style.display = "block";
+                    pokeContainerBackground.style.display = "block";
                     reLoading.style.display = "none";
                     }, 5000);
-                bottomPoint = -1
+                arrivedBottomPoint = true
             }
         });
     }
-
-    //非同期通信が終わってwindowはかりたいからthen
     fetchPokemons()
-    //Loading処理 https://tobiasahlin.com/spinkit/
-    //
-    // const script = document.createElement('script');
-    // document.body.appendChild(script);
+
+    function onClickPokemonList(){
+        isPokemonListScreen = true
+        scrollAreaPokemonList.style.display = "block"
+    }
+
+    function onClickGame(){
+        isPokemonListScreen = false
+        scrollAreaPokemonList.style.display = "none"
+    }
+
 
 </script>
 </body>
