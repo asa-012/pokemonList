@@ -241,7 +241,7 @@ function showRandomImages025s(){
     //6.結果が出たらWebStorageに保存する
     //TODO 7.BoxボタンクリックでWebStorageに入っているidを再Fetchする
     //TODo 8.fetch処理を書き換える　できれば全fetchで表示は200くらい
-    //TODo なんで終わってもwebstorageに追加されるのか　まあ画面ごと消せば良いが
+    //TODo 最後の終了画面ではcounterで1秒ごとに動かして結果と遷移しますとmainloadとBox画面に自動遷移
 
 
     // div要素を作成
