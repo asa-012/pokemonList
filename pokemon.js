@@ -32,7 +32,7 @@ let displayPokemonIds = []
 let passSec = 0;
 let passageId = -1;
 const maxCountSecond = 30;
-const countUpSpan = 0.25;
+const countUpInterval = 0.25;
 
 // カラー
 const colors = {
@@ -195,16 +195,16 @@ function showCount() {
         /*Result画面へ*/
         document.getElementById("count").innerHTML = "終了";
     } else {
-        passSec += countUpSpan // カウントアップ
+        passSec += countUpInterval // カウントアップ
         showRandomImages025s()
-        if(Number.isInteger(passSec - 0.25)) document.getElementById("count").innerHTML = "残り時間：" + restTime + "秒";
+        if(Number.isInteger(passSec - countUpInterval)) document.getElementById("count").innerHTML = "残り時間：" + restTime + "秒";
     }
 }
 
 // 繰り返し処理の開始
 function startShowing() {
     passSec = 0; // カウンタのリセット
-    passageId = setInterval('showCount()', 250); // タイマーをセット(1000ms間隔)
+    passageId = setInterval('showCount()', countUpInterval * 1000); // タイマーをセット(1000ms間隔)
 }
 
 // 繰り返し処理の中止
@@ -232,7 +232,7 @@ function showRandomImages025s(){
     //TODO 1秒に３匹くらい表示 iが２だと同じものが表示されるので今が何秒かどうかの計算が必要(passSecを変えれば良い)
     //TODO n=0... 2n 2n+1
     for(let i = 0; i < 2; i++){
-        //TODo passSec = 0.5 countUpSpan = 0.25
+        //TODo passSec = 0.5 countUpInterval = 0.25
         let pokemonImageIndex = 2 * ((passSec * 4) -1) + i;
         const displayPokemonImage = pokemonImages[displayPokemonIds[pokemonImageIndex]];
 
