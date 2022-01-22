@@ -51,6 +51,13 @@ li {
     padding-top: 80px;
 }
 
+/*Pokemon*/
+.poke-container-background {
+    justify-content: center;
+    margin: 0 auto;
+    max-width: 1200px;
+}
+
 .pokemon {
     background-color: #eee;
     border-radius: 10px;
