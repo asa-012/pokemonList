@@ -25,6 +25,8 @@ let isPokemonListScreen = true
 
 //imageの全配列
 let pokemonImages = []
+const maxDisplayPokemonGameCount = 90
+let displayPokemonIds = []
 
 // 秒数カウント用変数
 let passSec = 0;
@@ -200,8 +202,8 @@ function stopShowing() {
 }
 
 //関数定義
-function randomImages(id){
-    //TODO 1.fetch時に、事前にpictureUrlのリストを作っておく
+function showRandomImages(id){
+    //1.fetch時に、事前にpictureUrlのリストを作っておく
     //TODO 2.idをランダムで生成する　約180匹
     //TODO 3.ランダムで生成したidをpictureUrlのindexに指定して取り出す
     //TODO 4.ランダムな場所に表示させる
@@ -209,6 +211,15 @@ function randomImages(id){
     //TODO 5.onClickでidを渡して他の変数に格納する
     //TODo 6.結果が出たらWebStorageに保存する
     //TODO 7.BoxボタンクリックでWebStorageに入っているidを再Fetchする
+    //TODo 8.fetch処理を書き換える　できれば全fetchで表示は200くらい
+
+    displayPokemonIds = []
+
+    for (let i = 0;i<maxDisplayPokemonGameCount ;i++){
+        //TODO ポケモンは被っても良いとする 今はとりあえず100匹ぶんなので変更する
+        const id = Math.floor(Math.random() * 100);
+        displayPokemonIds.push(id)
+    }
 
     //関数の引数に設定したid要素を変数に代入
     const box = id;
