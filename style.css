@@ -43,12 +43,30 @@ li {
     font-size: 14px;
 }
 
+.scroll_area_game{
+    margin-top: 140px;
+}
+
+.start_game {
+    background:gold;
+    padding:1em 1em;
+    margin-left: 1em;
+    border:black 2px solid;
+    text-decoration:none;
+    color:black;
+    font-size:1.5em;
+    font-family:sans-serif;
+}
+
 /*Pokemon*/
+.scroll_area_pokemon_list {
+    padding-top: 140px;
+}
+
 .poke-container {
     justify-content: center;
     margin: 0 auto;
     max-width: 1200px;
-    padding-top: 80px;
 }
 
 /*Pokemon*/
