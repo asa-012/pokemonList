@@ -23,6 +23,9 @@ let pokemon_max_loading_count = 100;
 let arrivedBottomPoint = false;
 let isPokemonListScreen = true
 
+//imageの全配列
+let pokemonImages = []
+
 // 秒数カウント用変数
 let passSec = 0;
 let passageId = -1;
@@ -85,6 +88,8 @@ const getPokemon = async (id, isShow) => {
     const res = await fetch(url)
     const data = await res.json()
     createPokemonCard(data, isShow)
+    //imageをゲームで使うのでurl.pngを全て格納する
+    pokemonImages.push(data.sprites['front_default'])
 }
 
 // ポケモンカードを作成
