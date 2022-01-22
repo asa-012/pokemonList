@@ -5,8 +5,7 @@
 }
 
 body {
-    background: #efefbb;
-    background: linear-gradient(to right, #d4d3dd, #efefbb);
+    background-color: darkseagreen;
     font-family: 'Lato', sans-serif;
     align-items: center;
     justify-content: center;
@@ -77,8 +76,8 @@ li {
 }
 
 .game_field {
-    width: 100vh ; /*画面サイズに合わせる*/
-    height: 100vh;
+    margin-left: calc(-50vw + 50%);
+    margin-right: calc(-50vw + 50%);
 }
 
 /*Pokemon*/
