@@ -76,6 +76,11 @@ li {
     margin-left: 5%;
 }
 
+.game_field {
+    width: 100vh ; /*画面サイズに合わせる*/
+    height: 100vh;
+}
+
 /*Pokemon*/
 .scroll_area_pokemon_list {
     padding-top: 140px;

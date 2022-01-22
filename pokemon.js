@@ -6,6 +6,7 @@ const mainLoading = document.getElementById('loading_main')
 const reLoading = document.getElementById('loading_again')
 
 const scrollAreaGameStart = document.getElementById('scroll_area_game_start_screen')
+const gameField = document.getElementById('game_field')
 
 const header = document.getElementById('header')
 
@@ -14,6 +15,10 @@ pokeContainer.style.display = "none"
 reLoading.style.display = "none"
 pokeContainerBackground.style.display = "none"
 scrollAreaGameStart.style.display = "none"
+
+//backgroundを指定
+gameField.style.visibility = "hidden"
+gameField.style.backgroundColor = '#33CC66'
 
 // 定数を定義
 // 表示するポケモン数
@@ -148,6 +153,7 @@ function onClickPokemonList(){
     isPokemonListScreen = true
     scrollAreaPokemonList.style.display = "block"
     scrollAreaGameStart.style.display = "none"
+    gameField.style.visibility = 'hidden'
 }
 
 function onClickGame(){
@@ -155,9 +161,11 @@ function onClickGame(){
     isPokemonListScreen = false
     scrollAreaPokemonList.style.display = "none"
     scrollAreaGameStart.style.display = "block"
+    gameField.style.visibility = 'hidden'
 }
 
 function onClickGameStart(){
     header.style.visibility = 'hidden'
     scrollAreaGameStart.style.display = 'none'
+    gameField.style.visibility = 'visible'
 }
