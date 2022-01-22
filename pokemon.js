@@ -176,10 +176,20 @@ function onClickGameStart() {
     header.style.visibility = 'hidden'
     scrollAreaGameStart.style.display = 'none'
     gameField.style.display = 'block'
+
+    displayPokemonIds = []
+
+    for (let i = 0;i<maxDisplayPokemonGameCount ;i++){
+        //TODO ポケモンは被っても良いとする 今はとりあえず100匹ぶんなので変更する
+        const id = Math.floor(Math.random() * 100);
+        displayPokemonIds.push(id)
+    }
+
     startShowing()
+
 }
 
-function showPassage() {
+function showCount() {
     const restTime = maxCountSecond - passSec - 1
     if (restTime === 0) {
         /*Result画面へ*/
@@ -193,7 +203,7 @@ function showPassage() {
 // 繰り返し処理の開始
 function startShowing() {
     passSec = 0; // カウンタのリセット
-    passageId = setInterval('showPassage()', 1000); // タイマーをセット(1000ms間隔)
+    passageId = setInterval('showCount()', 1000); // タイマーをセット(1000ms間隔)
 }
 
 // 繰り返し処理の中止
@@ -201,10 +211,10 @@ function stopShowing() {
     clearInterval(passageId); // タイマーのクリア
 }
 
-//関数定義
-function showRandomImages(id){
+//TODO 0.25秒に一回通るようにする
+function showRandomImages025s(id){
     //1.fetch時に、事前にpictureUrlのリストを作っておく
-    //TODO 2.idをランダムで生成する　約180匹
+    //2.idをランダムで生成する　約180匹
     //TODO 3.ランダムで生成したidをpictureUrlのindexに指定して取り出す
     //TODO 4.ランダムな場所に表示させる
     //TODO タイマーで良いタイミングで消す　それを繰り返す
@@ -213,33 +223,18 @@ function showRandomImages(id){
     //TODO 7.BoxボタンクリックでWebStorageに入っているidを再Fetchする
     //TODo 8.fetch処理を書き換える　できれば全fetchで表示は200くらい
 
-    displayPokemonIds = []
-
-    for (let i = 0;i<maxDisplayPokemonGameCount ;i++){
-        //TODO ポケモンは被っても良いとする 今はとりあえず100匹ぶんなので変更する
-        const id = Math.floor(Math.random() * 100);
-        displayPokemonIds.push(id)
-    }
-
     //関数の引数に設定したid要素を変数に代入
     const box = id;
 
-    //画像配列（ファイル名や連番等を入れる）
-    const imageList = [
-        'image01',
-        'image02',
-        'image03',
-        'image04'
-    ];
-
-    //配列の数だけ繰り返し処理
-    for(let i = 0; i < imageList.length; i++){
+    //TODO 1秒に３匹くらい表示 iが２だと同じものが表示されるので今が何秒かどうかの計算が必要(passSecを変えれば良い)
+    for(let i = 0; i < 2; i++){
+        const displayPokemonImage = pokemonImages[displayPokemonIds[i]]
 
         //縦横軸用の乱数生成
         const x = Math.floor(Math.random() * 100);
         const y = Math.floor(Math.random() * 100);
 
         //box要素にimgタグを追加（乱数を代入した変数をポジションに設定）
-        box.append('<img src="assets/images/icon/'+imageList[i]+'.png" alt="" style="top:'+y+'%; left:'+x+'%;">');
+        box.append('<img src="displayPokemonImage" alt="" style="top:'+y+'%; left:'+x+'%;">');
     }
 }
