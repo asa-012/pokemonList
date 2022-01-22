@@ -7,6 +7,8 @@ const reLoading = document.getElementById('loading_again')
 
 const scrollAreaGameStart = document.getElementById('scroll_area_game_start_screen')
 const gameField = document.getElementById('game_field')
+const gameFinish = document.getElementById('game_finish')
+
 
 const header = document.getElementById('header')
 
@@ -16,6 +18,7 @@ reLoading.style.display = "none"
 pokeContainerBackground.style.display = "none"
 scrollAreaGameStart.style.display = "none"
 gameField.style.display = "none"
+gameFinish.style.display = "none"
 
 // 定数を定義 表示するポケモン数
 let pokemon_count = 250;
@@ -34,7 +37,7 @@ let clickedPokemonOnStorage = []
 
 // 秒数カウント用変数
 let passSec = 0;
-let passageId = -1;
+let counter_starter = -1;
 const maxCountSecond = 12;
 const countUpInterval = 0.25;
 //TODO この値が６だとPCによっては落ちるので9くらいに上げると動くと思います
@@ -205,7 +208,7 @@ function onClickPokemon(id){
 // 繰り返し処理の開始
 function startShowing() {
     passSec = 0; // カウンタのリセット
-    passageId = setInterval('showCount()', countUpInterval * 1000); // タイマーをセット(1000ms間隔)
+    counter_starter = setInterval('showCount()', countUpInterval * 1000); // タイマーをセット(1000ms間隔)
 }
 
 function showCount() {
@@ -217,7 +220,9 @@ function showCount() {
         //WebStorageにクリックしたポケモンのidリストを保存
         let json = JSON.stringify(clickedPokemonIds, undefined, 1);
         localStorage.setItem(KEY_CLICKED_POKEMON, json);
-        passageId = -1
+        counter_starter = -1
+        gameField.style.display = "none"
+        gameFinish.style.display = "block"
     } else {
         passSec += countUpInterval // カウントアップ
         showRandomImages025s()
@@ -233,9 +238,10 @@ function showRandomImages025s(){
     //ランダムな場所に表示させる
     //タイマーで良いタイミングで消す　それを繰り返す
     //5.onClickでidを渡して他の変数に格納する
-    //TODo 6.結果が出たらWebStorageに保存する
+    //6.結果が出たらWebStorageに保存する
     //TODO 7.BoxボタンクリックでWebStorageに入っているidを再Fetchする
     //TODo 8.fetch処理を書き換える　できれば全fetchで表示は200くらい
+    //TODo なんで終わってもwebstorageに追加されるのか　まあ画面ごと消せば良いが
 
 
     // div要素を作成

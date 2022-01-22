@@ -96,6 +96,12 @@ li {
     font-size: 20px;
 }
 
+.game_finish {
+    padding-top: 1em;
+    padding-left: 1em;
+    font-size: 80px;
+}
+
 /*Pokemon*/
 .scroll_area_pokemon_list {
     padding-top: 140px;
