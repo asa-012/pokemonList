@@ -193,3 +193,37 @@ function startShowing() {
 function stopShowing() {
     clearInterval(passageId); // タイマーのクリア
 }
+
+//関数定義
+function randomImages(id){
+    //TODO 1.fetch時に、事前にpictureUrlのリストを作っておく
+    //TODO 2.idをランダムで生成する　約180匹
+    //TODO 3.ランダムで生成したidをpictureUrlのindexに指定して取り出す
+    //TODO 4.ランダムな場所に表示させる
+    //TODO タイマーで良いタイミングで消す　それを繰り返す
+    //TODO 5.onClickでidを渡して他の変数に格納する
+    //TODo 6.結果が出たらWebStorageに保存する
+    //TODO 7.BoxボタンクリックでWebStorageに入っているidを再Fetchする
+
+    //関数の引数に設定したid要素を変数に代入
+    const box = id;
+
+    //画像配列（ファイル名や連番等を入れる）
+    const imageList = [
+        'image01',
+        'image02',
+        'image03',
+        'image04'
+    ];
+
+    //配列の数だけ繰り返し処理
+    for(let i = 0; i < imageList.length; i++){
+
+        //縦横軸用の乱数生成
+        const x = Math.floor(Math.random() * 100);
+        const y = Math.floor(Math.random() * 100);
+
+        //box要素にimgタグを追加（乱数を代入した変数をポジションに設定）
+        box.append('<img src="assets/images/icon/'+imageList[i]+'.png" alt="" style="top:'+y+'%; left:'+x+'%;">');
+    }
+}
