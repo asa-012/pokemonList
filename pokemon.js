@@ -27,12 +27,15 @@ let isPokemonListScreen = true
 let pokemonImages = []
 const maxDisplayPokemonGameCount = 90
 let displayPokemonIds = []
+let pokemonImageIndex = 0
 
 // 秒数カウント用変数
 let passSec = 0;
 let passageId = -1;
-const maxCountSecond = 30;
+const maxCountSecond = 12;
 const countUpInterval = 0.25;
+//TODO この値が６だとPCによっては落ちるので9くらいに上げると動くと思います
+const hidePokemonSpan = 6;
 
 // カラー
 const colors = {
@@ -189,6 +192,12 @@ function onClickGameStart() {
     startShowing()
 }
 
+// 繰り返し処理の開始
+function startShowing() {
+    passSec = 0; // カウンタのリセット
+    passageId = setInterval('showCount()', countUpInterval * 1000); // タイマーをセット(1000ms間隔)
+}
+
 function showCount() {
     const restTime = maxCountSecond - passSec - 1
     if (restTime === 0) {
@@ -199,17 +208,6 @@ function showCount() {
         showRandomImages025s()
         if(Number.isInteger(passSec - countUpInterval)) document.getElementById("count").innerHTML = "残り時間：" + restTime + "秒";
     }
-}
-
-// 繰り返し処理の開始
-function startShowing() {
-    passSec = 0; // カウンタのリセット
-    passageId = setInterval('showCount()', countUpInterval * 1000); // タイマーをセット(1000ms間隔)
-}
-
-// 繰り返し処理の中止
-function stopShowing() {
-    clearInterval(passageId); // タイマーのクリア
 }
 
 //TODO 0.25秒に一回通るようにする
@@ -233,17 +231,20 @@ function showRandomImages025s(){
     //TODO n=0... 2n 2n+1
     for(let i = 0; i < 2; i++){
         //TODo passSec = 0.5 countUpInterval = 0.25
-        let pokemonImageIndex = 2 * ((passSec * 4) -1) + i;
+        pokemonImageIndex = 2 * ((passSec * 4) -1) + i;
         const displayPokemonImage = pokemonImages[displayPokemonIds[pokemonImageIndex]];
 
         //縦横軸用の乱数生成
-        const x = Math.floor(Math.random() * 100);
-        const y = Math.floor(Math.random() * 100);
+        const x = Math.floor(Math.random() * 94);
+        const y = Math.floor(Math.random() * 94);
 
         //box要素にimgタグを追加（乱数を代入した変数をポジションに設定）
-        divPokemonRandomImage.innerHTML = '<img src="' + displayPokemonImage + '" alt="" style="top:'+y+'%; left:'+x+'%;">'
-
-        gameField.appendChild(divPokemonRandomImage)
-
+        divPokemonRandomImage.innerHTML = '<img id="' + pokemonImageIndex + '" src="' + displayPokemonImage + '" alt="" style="top:'+y+'%; left:'+x+'%;">'
     }
+    //hidePokemonSpan分のindexが離れたものはhide状態にします
+    if(pokemonImageIndex >= hidePokemonSpan){
+        document.getElementById((pokemonImageIndex - hidePokemonSpan).toString()).remove()
+    }
+
+    gameField.appendChild(divPokemonRandomImage)
 }
