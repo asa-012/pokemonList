@@ -52,16 +52,16 @@ const main_types = Object.keys(colors)
 // ポケモン取得
 const fetchPokemons = async () => {
     for (let i = 1; i <= pokemon_count; i++) {
-        if(i <= pokemon_max_loading_count) {
-            await getPokemon(i,true)
-            if(i === pokemon_max_loading_count){
+        if (i <= pokemon_max_loading_count) {
+            await getPokemon(i, true)
+            if (i === pokemon_max_loading_count) {
                 scrollToBottom()
             }
-        }else{
+        } else {
             mainLoading.remove()
             pokeContainer.style.display = "block"
             reLoading.style.display = "block"
-            await getPokemon(i,false)
+            await getPokemon(i, false)
         }
     }
     // //追加ローディング分岐処理
@@ -80,15 +80,15 @@ const fetchPokemons = async () => {
     // }
 }
 
-const getPokemon = async (id,isShow) => {
+const getPokemon = async (id, isShow) => {
     const url = `https://pokeapi.co/api/v2/pokemon/${id}`
     const res = await fetch(url)
     const data = await res.json()
-    createPokemonCard(data,isShow)
+    createPokemonCard(data, isShow)
 }
 
 // ポケモンカードを作成
-const createPokemonCard = (pokemon,isShow) => {
+const createPokemonCard = (pokemon, isShow) => {
     // div要素を作成
     const pokemonEl = document.createElement('div')
     // pokemonクラスを追加
@@ -116,17 +116,17 @@ const createPokemonCard = (pokemon,isShow) => {
     </div>
     `
 
-    if(isShow){
+    if (isShow) {
         // poke_containerの子要素として追加
         pokeContainer.appendChild(pokemonEl)
-    }else{
+    } else {
         pokeContainerBackground.appendChild(pokemonEl)
     }
 
 }
 
-function scrollToBottom(){
-// 一番下までスクロールした時の数値を取得(window.innerHeight分(画面表示領域分)はスクロールをしないため引く)
+function scrollToBottom() {
+    // 一番下までスクロールした時の数値を取得(window.innerHeight分(画面表示領域分)はスクロールをしないため引く)
     const bodyHeight = document.body.clientHeight // bodyの高さを取得
     const windowHeight = window.innerHeight // windowの高さを取得
     let bottomPoint = bodyHeight - windowHeight
@@ -148,7 +148,7 @@ function scrollToBottom(){
 }
 fetchPokemons().then(_ => {})
 
-function onClickPokemonList(){
+function onClickPokemonList() {
     //TODO この条件は全てのクリック箇所で実装すること
     header.style.visibility = 'visible'
     isPokemonListScreen = true
@@ -157,7 +157,7 @@ function onClickPokemonList(){
     gameField.style.display = 'none'
 }
 
-function onClickGame(){
+function onClickGame() {
     header.style.visibility = 'visible'
     isPokemonListScreen = false
     scrollAreaPokemonList.style.display = "none"
@@ -165,32 +165,31 @@ function onClickGame(){
     gameField.style.display = 'none'
 }
 
-function onClickGameStart(){
+function onClickGameStart() {
     header.style.visibility = 'hidden'
     scrollAreaGameStart.style.display = 'none'
     gameField.style.display = 'block'
     startShowing()
 }
 
-// 繰り返し処理の中身
-    function showPassage() {
-    const restTime = maxCountSecond - passSec -1
-        if(restTime === 0){
-            /*Result画面へ*/
-            document.getElementById("count").innerHTML = "終了";
-        }else{
-            passSec++;   // カウントアップ
-            document.getElementById("count").innerHTML = "残り時間：" + restTime + "秒";
-        }
+function showPassage() {
+    const restTime = maxCountSecond - passSec - 1
+    if (restTime === 0) {
+        /*Result画面へ*/
+        document.getElementById("count").innerHTML = "終了";
+    } else {
+        passSec++; // カウントアップ
+        document.getElementById("count").innerHTML = "残り時間：" + restTime + "秒";
     }
+}
 
 // 繰り返し処理の開始
-    function startShowing() {
-        passSec = 0;   // カウンタのリセット
-        passageId = setInterval('showPassage()', 1000);   // タイマーをセット(1000ms間隔)
-    }
+function startShowing() {
+    passSec = 0; // カウンタのリセット
+    passageId = setInterval('showPassage()', 1000); // タイマーをセット(1000ms間隔)
+}
 
 // 繰り返し処理の中止
-    function stopShowing() {
-        clearInterval( passageId );   // タイマーのクリア
-    }
+function stopShowing() {
+    clearInterval(passageId); // タイマーのクリア
+}
