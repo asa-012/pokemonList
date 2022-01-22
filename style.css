@@ -76,8 +76,13 @@ li {
 }
 
 .game_field {
-    margin-left: calc(-50vw + 50%);
-    margin-right: calc(-50vw + 50%);
+    width: 100vh;
+    height: 100vh;
+}
+
+.count {
+    padding-top: 1em;
+    padding-left: 1em;
 }
 
 /*Pokemon*/

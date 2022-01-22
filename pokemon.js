@@ -18,7 +18,6 @@ scrollAreaGameStart.style.display = "none"
 
 //backgroundを指定
 gameField.style.display = "none"
-gameField.style.backgroundColor = '#33CC66'
 
 // 定数を定義
 // 表示するポケモン数
