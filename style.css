@@ -63,13 +63,17 @@ li {
     transition    : .3s;         /* なめらか変化 */
     box-shadow    : 3px 3px 3px #666666;  /* 影の設定 */
     border        : 2px solid #66ff66;    /* 枠の指定 */
-    margin-left: 2em;
+    margin-left: 5%;
 }
 
 .start_game :hover {
     box-shadow    : none;        /* カーソル時の影消去 */
     color         : #66ff66;     /* 背景色     */
     background    : #330033;     /* 文字色     */
+}
+
+.description_game_info {
+    margin-left: 5%;
 }
 
 /*Pokemon*/
