@@ -32,9 +32,10 @@ let pokemonImageIndex = 0
 // 秒数カウント用変数
 let passSec = 0;
 let passageId = -1;
-const maxCountSecond = 30;
+const maxCountSecond = 12;
 const countUpInterval = 0.25;
-const hidePokemonSpan = 8;
+//TODO この値が６だとPCによっては落ちるので9くらいに上げると動くと思います
+const hidePokemonSpan = 6;
 
 // カラー
 const colors = {
@@ -234,8 +235,8 @@ function showRandomImages025s(){
         const displayPokemonImage = pokemonImages[displayPokemonIds[pokemonImageIndex]];
 
         //縦横軸用の乱数生成
-        const x = Math.floor(Math.random() * 100);
-        const y = Math.floor(Math.random() * 100);
+        const x = Math.floor(Math.random() * 94);
+        const y = Math.floor(Math.random() * 94);
 
         //box要素にimgタグを追加（乱数を代入した変数をポジションに設定）
         divPokemonRandomImage.innerHTML = '<img id="' + pokemonImageIndex + '" src="' + displayPokemonImage + '" alt="" style="top:'+y+'%; left:'+x+'%;">'
