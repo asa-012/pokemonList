@@ -15,16 +15,18 @@ pokeContainer.style.display = "none"
 reLoading.style.display = "none"
 pokeContainerBackground.style.display = "none"
 scrollAreaGameStart.style.display = "none"
-
-//backgroundを指定
 gameField.style.display = "none"
 
-// 定数を定義
-// 表示するポケモン数
+// 定数を定義 表示するポケモン数
 let pokemon_count = 250;
 let pokemon_max_loading_count = 100;
 let arrivedBottomPoint = false;
 let isPokemonListScreen = true
+
+// 秒数カウント用変数
+let passSec = 0;
+let passageId = -1;
+const maxCountSecond = 30;
 
 // カラー
 const colors = {
@@ -167,4 +169,28 @@ function onClickGameStart(){
     header.style.visibility = 'hidden'
     scrollAreaGameStart.style.display = 'none'
     gameField.style.display = 'block'
+    startShowing()
 }
+
+// 繰り返し処理の中身
+    function showPassage() {
+    const restTime = maxCountSecond - passSec -1
+        if(restTime === 0){
+            /*Result画面へ*/
+            document.getElementById("count").innerHTML = "終了";
+        }else{
+            passSec++;   // カウントアップ
+            document.getElementById("count").innerHTML = "残り時間：" + restTime + "秒";
+        }
+    }
+
+// 繰り返し処理の開始
+    function startShowing() {
+        passSec = 0;   // カウンタのリセット
+        passageId = setInterval('showPassage()', 1000);   // タイマーをセット(1000ms間隔)
+    }
+
+// 繰り返し処理の中止
+    function stopShowing() {
+        clearInterval( passageId );   // タイマーのクリア
+    }
