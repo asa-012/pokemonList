@@ -149,8 +149,22 @@ const getPokemon = async (id, isShow) => {
         const type = main_types.find(type => dataTypeAndImage.types.map(type => type.type.name).indexOf(type) > -1)
         const image = dataTypeAndImage.sprites['front_default']
         const species = dataName.genera[0].genus
+        let description = ''
+        //漢字が含まれるか判定
+        let regexp = /([\u{3005}\u{3007}\u{303b}\u{3400}-\u{9FFF}\u{F900}-\u{FAFF}\u{20000}-\u{2FFFF}][\u{E0100}-\u{E01EF}\u{FE00}-\u{FE02}]?)/mu;
+        for(let i=0;i<30;i++){
+            //日本語で漢字の入ったものを取得する
+            if(dataName.flavor_text_entries[i].language['name'] === "ja"){
+                if(regexp.test(dataName.flavor_text_entries[i].flavor_text)) {
+                    description = dataName.flavor_text_entries[i].flavor_text
+                    break
+                }
+            }
+        }
 
-        createPokemonCard(id,name,image,type,species,isShow)
+        if(name !== undefined || type !== "undefined" || image !== undefined || species !== undefined || description !== undefined) {
+            createPokemonCard(id, name, image, type, species, description, isShow)
+        }
     }
 }
 
@@ -161,9 +175,10 @@ const getPokemon = async (id, isShow) => {
  * @param image
  * @param type
  * @param species
+ * @param description
  * @param isShow
  */
-const createPokemonCard = (id , name , image , type , species, isShow) => {
+const createPokemonCard = (id , name , image , type , species, description, isShow) => {
     // div要素を作成
     const pokemonEl = document.createElement('div')
     // pokemonクラスを追加
@@ -181,7 +196,7 @@ const createPokemonCard = (id , name , image , type , species, isShow) => {
         <small class="type">${species}</small>
         <br>
         <small class="type">Type: <span>${type}</span> </small>
-        <p></p>
+        <p>${description}</p>
     </div>
     `
 
