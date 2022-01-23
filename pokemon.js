@@ -342,7 +342,12 @@ function showCount() {
             gameFinishField.style.display = "block"
             let result;
             if (clickedPokemonIdsOnStorage != null) {
-                result = clickedPokemonIdsOnStorage.concat(clickedPokemonIds)
+                //順番を新しい順にするため
+                result = clickedPokemonIdsOnStorage.reverse().concat(clickedPokemonIds.reverse())
+                result.reverse()
+                //元に戻しておく
+                clickedPokemonIdsOnStorage.reverse()
+                clickedPokemonIds.reverse()
             } else {
                 result = clickedPokemonIds
             }
@@ -430,9 +435,9 @@ function finishGamePokemonImage() {
             divPokemonImage.innerHTML += '<img src="' + pokemonImages[result[i]-1] + '" alt="" style="top:' + y + '%; left:' + x + '%;">'
         }
         if(result.length !== 0){
-            gameFinishPokemonCountText.innerHTML = 'あなたはポケモンを'+ result.length + '匹捕まえました.<br><br>画像は以下の通りです'
+            gameFinishPokemonCountText.innerHTML = 'ポケモンを'+ result.length + '匹捕まえました.<br><br>画像は以下の通りです'
         }else{
-            gameFinishPokemonCountText.innerHTML = 'あなたはポケモンを捕まえれませんでした.'
+            gameFinishPokemonCountText.innerHTML = 'ポケモンを捕まえることができませんでした.'
         }
         imageFinishScoreContainer.appendChild(divPokemonImage)
     }
