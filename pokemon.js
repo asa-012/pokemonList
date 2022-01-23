@@ -11,7 +11,6 @@ const gameFinishField = document.getElementById('game_finish_field')
 const gameCountAndFinishText = document.getElementById("count_text")
 const gameFinishText = document.getElementById("text_finish")
 const gameFinishCompileText = document.getElementById("text_finish_compile")
-const gameFinishScoreText = document.getElementById("text_finish_score")
 const gameFinishRegisterText = document.getElementById("text_finish_register")
 const gameFinishNavigationText = document.getElementById("text_finish_navigation")
 const imageFinishScoreContainer = document.getElementById("image_finish_score")
@@ -27,9 +26,9 @@ scrollAreaGameStart.style.display = "none"
 gameField.style.display = "none"
 gameFinishField.style.display = "none"
 gameFinishCompileText.style.display = "none"
-gameFinishScoreText.style.display = "none"
 gameFinishRegisterText.style.display = "none"
 gameFinishNavigationText.style.display = "none"
+imageFinishScoreContainer.style.display = "none"
 
 
 // 定数を定義 表示するポケモンidのMax数
@@ -204,7 +203,6 @@ function onClickGame() {
     gameField.style.display = 'none'
     gameFinishText.style.text = "block"
     gameFinishCompileText.style.display = "none"
-    gameFinishScoreText.style.display = "none"
     gameFinishRegisterText.style.display = "none"
     gameFinishNavigationText.style.display = "none"
 
@@ -278,12 +276,11 @@ function finishGameFlow(){
         finishGamePokemonImage()
     }else if(finishGameFlowIntervalCount === 4){
         mainLoading.style.display = "none"
-        imageFinishScoreContainer.style.display = "none"
         gameFinishField.style.display = "block"
-        gameFinishScoreText.style.display = "block"
+        imageFinishScoreContainer.style.display = "block"
         //TODO 画像を貼る
     }else if(finishGameFlowIntervalCount === 8){
-        gameFinishScoreText.style.display = "none"
+        imageFinishScoreContainer.style.display = "none"
         gameFinishRegisterText.style.display = "block"
     }else if(finishGameFlowIntervalCount === 10){
         gameFinishRegisterText.style.display = "none"
@@ -348,7 +345,6 @@ function finishGamePokemonImage() {
             const y = multiple * 10
 
             divPokemonImage.innerHTML = '<img src="' + pokemonImages[result[i]-1] + '" alt="" style="top:' + y + '%; left:' + x + '%;">'
-            console.log(divPokemonImage.innerHTML)
             imageFinishScoreContainer.appendChild(divPokemonImage)
         }
     }

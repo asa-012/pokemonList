@@ -96,16 +96,23 @@ li {
     font-size: 20px;
 }
 
-.game_finish_field {
+.text_finish {
     padding-top: 1em;
     padding-left: 1em;
     font-size: 80px;
 }
 
-.image_finish_score {
+.game_finish_field {
     position: relative;
     width: 100%;
-    height: 50%;
+    height: 100vh;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+.image_finish_score {
+    width: 100vh;
+    height: 50vh;
     margin: 0 auto;
 }
 
