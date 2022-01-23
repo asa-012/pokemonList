@@ -2,6 +2,8 @@
 const scrollAreaPokemonList = document.getElementById('scroll_area_pokemon_list')
 const pokeContainer = document.getElementById('poke-container')
 const pokeContainerBackground = document.getElementById('poke-container_background')
+const textNoPokemon = document.getElementById('text_no_pokemon')
+
 const mainLoading = document.getElementById('loading_main')
 const reLoading = document.getElementById('loading_again')
 
@@ -64,6 +66,7 @@ const main_types = Object.keys(colors)
 
 // noneで非表示 blockで表示
 pokeContainer.style.display = "none"
+textNoPokemon.style.display = "none"
 reLoading.style.display = "none"
 pokeContainerBackground.style.display = "none"
 scrollAreaGameStart.style.display = "none"
@@ -117,6 +120,8 @@ const fetchPokemons = async () => {
     }else{
         mainLoading.style.display = "none"
         pokeContainer.style.display = "block"
+        textNoPokemon.style.display = "block"
+        textNoPokemon.innerHTML = "ゲームをしてポケモンを入手しましょう！<br>右上のメニューから参加できます"
     }
 }
 

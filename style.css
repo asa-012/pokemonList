@@ -127,7 +127,11 @@ li {
     max-width: 1200px;
 }
 
-/*Pokemon*/
+.text_no_pokemon {
+    text-align: center;
+    font-size: 40px;
+}
+
 .poke-container-background {
     justify-content: center;
     margin: 0 auto;
