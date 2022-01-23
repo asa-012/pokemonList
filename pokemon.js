@@ -61,7 +61,13 @@ const colors = {
     psychic: '#eaeda1',
     flying: '#F5F5F5',
     fighting: '#E6E0D4',
-    normal: '#F5F5F5'
+    normal: '#F5F5F5',
+    ghost: '#800080',
+    steel: '#ffffff',
+    ice: '#faebd7',
+    dark: '#00008b',
+    unknown:'#b8860b',
+    shadow:'#696969'
 }
 // colorsのkeyを配列に格納
 const main_types = Object.keys(colors)
@@ -161,10 +167,7 @@ const getPokemon = async (id, isShow) => {
                 }
             }
         }
-
-        if(name !== undefined || type !== "undefined" || image !== undefined || species !== undefined || description !== undefined) {
             createPokemonCard(id, name, image, type, species, description, isShow)
-        }
     }
 }
 
