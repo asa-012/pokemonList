@@ -49,6 +49,11 @@ li {
     font-size: 40px;
 }
 
+.type {
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
 /*game*/
 .scroll_area_game_start_screen{
     margin-top: 140px;

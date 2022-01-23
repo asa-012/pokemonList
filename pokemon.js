@@ -65,6 +65,29 @@ const colors = {
     unknown:'#b8860b',
     shadow:'#696969'
 }
+
+const typeEnToJp = {
+    fire: 'ほのお',
+    grass: 'くさ',
+    electric: 'でんき',
+    water: 'みず',
+    ground: 'じめん',
+    rock: 'いわ',
+    fairy: 'フェアリー',
+    poison: 'どく',
+    bug: 'むし',
+    dragon: 'ドラゴン',
+    psychic: 'エスパー',
+    flying: 'ひこう',
+    fighting: 'かくとう',
+    normal: 'ノーマル',
+    ghost: 'ゴースト',
+    steel: 'はがね',
+    ice: 'こおり',
+    dark: 'あく',
+    unknown:'???',
+    shadow:'ダーク'
+}
 // colorsのkeyを配列に格納
 const main_types = Object.keys(colors)
 
@@ -148,7 +171,8 @@ const getPokemon = async (id, isShow) => {
         const dataTypeAndImage = await resTypeAndImage.json()
 
         const name = dataName.names[0].name
-        const type = main_types.find(type => dataTypeAndImage.types.map(type => type.type.name).indexOf(type) > -1)
+        const typeEN = main_types.find(type => dataTypeAndImage.types.map(type => type.type.name).indexOf(type) > -1)
+        const typeJP = typeEnToJp[typeEN]
         const image = dataTypeAndImage.sprites['front_default']
         const species = dataName.genera[0].genus
         let description = ''
@@ -163,7 +187,7 @@ const getPokemon = async (id, isShow) => {
                 }
             }
         }
-            createPokemonCard(id, name, image, type, species, description, isShow)
+            createPokemonCard(id, name, image, typeJP, typeEN ,species, description, isShow)
     }
 }
 
@@ -173,17 +197,18 @@ const getPokemon = async (id, isShow) => {
  * @param name
  * @param image
  * @param type
+ * @param typeKey
  * @param species
  * @param description
  * @param isShow
  */
-const createPokemonCard = (id , name , image , type , species, description, isShow) => {
+const createPokemonCard = (id , name , image , type ,typeKey , species, description, isShow) => {
     // div要素を作成
     const pokemonEl = document.createElement('div')
     // pokemonクラスを追加
     pokemonEl.classList.add('pokemon')
     // ポケモンの背景色を設定
-    pokemonEl.style.backgroundColor = colors[type]
+    pokemonEl.style.backgroundColor = colors[typeKey]
 
     const description1Line = description.slice(0, 21)
     const add = '<br>'
@@ -199,9 +224,9 @@ const createPokemonCard = (id , name , image , type , species, description, isSh
     <div class="info">
         <span class="number">#${id}</span>
         <h3 class="name">${name}</h3>
-        <small class="type">${species}</small>
+        <small class="type"><span>${type}</span>タイプ</small>
         <br>
-        <small class="type">Type: <span>${type}</span> </small>
+        <small class="type">${species}</small>
         <p class="description">${descriptionResult}</p>
     </div>
     `
