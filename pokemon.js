@@ -16,20 +16,7 @@ const gameFinishNavigationText = document.getElementById("text_finish_navigation
 const imageFinishScoreContainer = document.getElementById("image_finish_score")
 const gameFinishPokemonCountText = document.getElementById("text_image_finish_score")
 
-
 const header = document.getElementById('header')
-
-// noneで非表示 blockで表示
-pokeContainer.style.display = "none"
-reLoading.style.display = "none"
-pokeContainerBackground.style.display = "none"
-scrollAreaGameStart.style.display = "none"
-gameField.style.display = "none"
-gameFinishField.style.display = "none"
-gameFinishCompileText.style.display = "none"
-gameFinishRegisterText.style.display = "none"
-gameFinishNavigationText.style.display = "none"
-imageFinishScoreContainer.style.display = "none"
 
 // 定数を定義 表示するポケモンidのMax数
 let pokemon_count = 720;
@@ -74,6 +61,18 @@ const colors = {
 }
 // colorsのkeyを配列に格納
 const main_types = Object.keys(colors)
+
+// noneで非表示 blockで表示
+pokeContainer.style.display = "none"
+reLoading.style.display = "none"
+pokeContainerBackground.style.display = "none"
+scrollAreaGameStart.style.display = "none"
+gameField.style.display = "none"
+gameFinishField.style.display = "none"
+gameFinishCompileText.style.display = "none"
+gameFinishRegisterText.style.display = "none"
+gameFinishNavigationText.style.display = "none"
+imageFinishScoreContainer.style.display = "none"
 
 /**
  * WebStorageを取得します
