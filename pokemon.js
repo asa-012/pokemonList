@@ -272,19 +272,19 @@ function finishGameFlow(){
         gameFinishField.style.display = "none"
         mainLoading.style.display = 'block'
         finishGamePokemonImage()
-    }else if(finishGameFlowIntervalCount === 3){
+    }else if(finishGameFlowIntervalCount === 2){
         mainLoading.style.display = "none"
         gameFinishField.style.display = "block"
         imageFinishScoreContainer.style.display = "block"
         //TODO 画像を貼る
-    }else if(finishGameFlowIntervalCount === 6){
+    }else if(finishGameFlowIntervalCount === 5){
         imageFinishScoreContainer.style.display = "none"
         gameFinishRegisterText.style.display = "block"
-    }else if(finishGameFlowIntervalCount === 7){
+    }else if(finishGameFlowIntervalCount === 6){
         gameFinishRegisterText.style.display = "none"
         gameFinishField.style.display = "none"
         mainLoading.style.display = "block"
-    }else if(finishGameFlowIntervalCount === 9){
+    }else if(finishGameFlowIntervalCount === 7){
         clearInterval(COUNTER_GAME_FINISH)
         onClickPokemonList()
     }
