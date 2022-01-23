@@ -32,6 +32,10 @@ let clickedPokemonIds = []
 const KEY_CLICKED_POKEMON = "key_clicked_pokemon"
 let clickedPokemonIdsOnStorage = []
 
+//typeの日本語訳用リスト
+let typeListJp;
+let typeListEn;
+
 // 秒数カウント用変数
 let passSec = 0;
 let COUNTER_GAME_MAIN = -1;
@@ -132,42 +136,52 @@ const getPokemonAllImage = async (id) => {
 
 const getPokemon = async (id, isShow) => {
     if(id !== undefined) {
-        const url = `https://pokeapi.co/api/v2/pokemon-species/${id}`
-        const res = await fetch(url)
-        const data = await res.json()
-        createPokemonCard(data, id ,isShow)
+        const urlName = `https://pokeapi.co/api/v2/pokemon-species/${id}`
+        const urlTypeAndImage = `https://pokeapi.co/api/v2/pokemon/${id}`
+
+        const resName = await fetch(urlName)
+        const dataName = await resName.json()
+
+        const resTypeAndImage = await fetch(urlTypeAndImage)
+        const dataTypeAndImage = await resTypeAndImage.json()
+
+        const name = dataName.names[0].name
+        const type = main_types.find(type => dataTypeAndImage.types.map(type => type.type.name).indexOf(type) > -1)
+        const image = dataTypeAndImage.sprites['front_default']
+        const species = dataName.genera[0].genus
+
+        createPokemonCard(id,name,image,type,species,isShow)
     }
 }
 
 /**
  * ポケモンのカードを作成します
- * @param pokemonJson
  * @param id
+ * @param name
+ * @param image
+ * @param type
+ * @param species
  * @param isShow
  */
-const createPokemonCard = (pokemonJson, id ,isShow) => {
+const createPokemonCard = (id , name , image , type , species, isShow) => {
     // div要素を作成
     const pokemonEl = document.createElement('div')
     // pokemonクラスを追加
     pokemonEl.classList.add('pokemonJson')
-    console.log(pokemonJson)
-    // ポケモン情報からデータを格納
-    const name = pokemonJson.names[0].name
-    // const poke_types = pokemon.types.map(type => type.type.name)
-    // const type = main_types.find(type => poke_types.indexOf(type) > -1)
-    // const image = pokemonJson.sprites['front_default']
     // ポケモンの背景色を設定
-    //TODO pokemonEl.style.backgroundColor = colors[type]
+    pokemonEl.style.backgroundColor = colors[type]
 
     //TODO        <img src=${image} alt=""> img-containerのdivの間に
     //TODo spanの間に${type}
     pokemonEl.innerHTML = `
-    <div class="img-container">
-    </div>
+    <div class="img-container"><img src=${image} alt=""></div>
     <div class="info">
         <span class="number">#${id}</span>
         <h3 class="name">${name}</h3>
-        <small class="type">Type: <span></span> </small>
+        <small class="type">${species}</small>
+        <br>
+        <small class="type">Type: <span>${type}</span> </small>
+        <p></p>
     </div>
     `
 
