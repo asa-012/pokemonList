@@ -92,7 +92,7 @@ const fetchPokemons = async () => {
         for (let i = 0; i <= clickedPokemonIdsOnStorage.length; i++) {
             if (i <= pokemon_max_loading_count + 1) {
                 await getPokemon(clickedPokemonIdsOnStorage[i], true)
-                console.log("finish getPokemon")
+                console.log(clickedPokemonIdsOnStorage[i])
                 if (i === pokemon_max_loading_count) {
                     scrollToBottom()
                 }else if (i === clickedPokemonIdsOnStorage.length){
@@ -103,7 +103,7 @@ const fetchPokemons = async () => {
                 mainLoading.style.display = "none"
                 pokeContainer.style.display = "block"
                 reLoading.style.display = "block"
-                await getPokemon(i, false)
+                await getPokemon(clickedPokemonIdsOnStorage[i], false)
             }
         }
     }else{
