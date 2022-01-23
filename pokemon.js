@@ -87,12 +87,10 @@ const fetchAllPokemonImage = async () => {
 
 // ポケモン取得
 const fetchPokemons = async () => {
-    console.log(clickedPokemonIdsOnStorage)
     if(clickedPokemonIdsOnStorage != null) {
         for (let i = 0; i <= clickedPokemonIdsOnStorage.length; i++) {
             if (i <= pokemon_max_loading_count + 1) {
                 await getPokemon(clickedPokemonIdsOnStorage[i], true)
-                console.log(clickedPokemonIdsOnStorage[i])
                 if (i === pokemon_max_loading_count) {
                     scrollToBottom()
                 }else if (i === clickedPokemonIdsOnStorage.length){
@@ -138,7 +136,6 @@ const getPokemonAllImage = async (id) => {
 
 // ポケモンカードを作成
 const createPokemonCard = (pokemon, isShow) => {
-    console.log(pokemon)
     // div要素を作成
     const pokemonEl = document.createElement('div')
     // pokemonクラスを追加
@@ -183,10 +180,8 @@ function scrollToBottom() {
 
     window.addEventListener('scroll', () => {
         const scrollTop = document.documentElement.scrollTop;
-        console.log(scrollTop)
         //一番下にスクロール&&1回でも一番下にスクロールしたか&今の画面がpokemonListかどうか
         if (scrollTop >= bottomPoint && !arrivedBottomPoint && isPokemonListScreen) {
-            console.log("bottom")
             //一番下にスクロールした時に5秒ローディング
             setTimeout(function() {
                 pokeContainerBackground.style.display = "block";
@@ -224,14 +219,12 @@ function onClickGameStart() {
     //初期化
     displayPokemonIds = []
     clickedPokemonIdsOnStorage = JSON.parse(localStorage.getItem(KEY_CLICKED_POKEMON))
-    console.log(localStorage.getItem(KEY_CLICKED_POKEMON))
 
     for (let i = 0;i<maxDisplayPokemonGameCount ;i++){
         //ポケモンは被っても良いとする
         const id = Math.floor(Math.random() * pokemon_count);
         displayPokemonIds.push(id)
     }
-    console.log(displayPokemonIds)
 
     startShowing()
 }
@@ -276,7 +269,6 @@ function showCount() {
 
 function finishGameFlow(){
     //HACK:SetInterval内ではinnerHTMLを書き換えることはできない仕様となっているからvisibleで文字列を変える　
-    console.log(finishGameFlowIntervalCount)
     finishGameFlowIntervalCount++
     if(finishGameFlowIntervalCount === 1){
         gameFinishText.style.display = "none"
