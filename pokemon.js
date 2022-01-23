@@ -51,7 +51,8 @@ let COUNTER_GAME_MAIN = -1;
 const maxCountSecond = 10;
 const countUpInterval = 0.25;
 //TODO この値が６だとPCによっては落ちるので9くらいに上げると動くと思います
-const hidePokemonSpan = 10;
+
+// const hidePokemonSpan = 10;
 
 //gameが終わった後のFlow
 let COUNTER_GAME_FINISH = -1;
