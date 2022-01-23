@@ -90,13 +90,13 @@ li {
     height: 140px
 }
 
-.count {
+.count_texts {
     padding-top: 1em;
     padding-left: 1em;
     font-size: 20px;
 }
 
-.game_finish {
+.game_finish_field {
     padding-top: 1em;
     padding-left: 1em;
     font-size: 80px;
