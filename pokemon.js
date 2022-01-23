@@ -259,7 +259,7 @@ function showCount() {
             }
             const clickedPokemonIdsJson = JSON.stringify(result);
             localStorage.setItem(KEY_CLICKED_POKEMON, clickedPokemonIdsJson);
-            COUNTER_GAME_FINISH = setInterval('finishGameFlow()', 2000); // タイマーをセット(1000ms間隔)
+            COUNTER_GAME_FINISH = setInterval('finishGameFlow()', 1500); // タイマーをセット(1000ms間隔)
         } else {
             passSec += countUpInterval // カウントアップ
             showRandomImages025s()
@@ -272,21 +272,22 @@ function finishGameFlow(){
     finishGameFlowIntervalCount++
     if(finishGameFlowIntervalCount === 1){
         gameFinishText.style.display = "none"
-        gameFinishCompileText.style.display = "block"
-        //TODO 画像を貼る
-    }else if(finishGameFlowIntervalCount === 3){
-        gameFinishCompileText.style.display = "none"
+        gameFinishField.style.display = "none"
+        mainLoading.style.display = 'block'
+
+    }else if(finishGameFlowIntervalCount === 4){
+        mainLoading.style.display = "none"
+        gameFinishField.style.display = "block"
         gameFinishScoreText.style.display = "block"
-    }else if(finishGameFlowIntervalCount === 5){
+        //TODO 画像を貼る
+    }else if(finishGameFlowIntervalCount === 8){
         gameFinishScoreText.style.display = "none"
         gameFinishRegisterText.style.display = "block"
-    }else if(finishGameFlowIntervalCount === 6){
+    }else if(finishGameFlowIntervalCount === 10){
         gameFinishRegisterText.style.display = "none"
-        gameFinishNavigationText.style.display = "block"
-    }else if(finishGameFlowIntervalCount === 7){
         gameFinishField.style.display = "none"
-        isPokemonListScreen = true
-        gameFinishNavigationText.style.display = "none"
+        mainLoading.style.display = "block"
+    }else if(finishGameFlowIntervalCount === 12){
         clearInterval(COUNTER_GAME_FINISH)
         onClickPokemonList()
     }
