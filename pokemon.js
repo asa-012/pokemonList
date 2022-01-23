@@ -315,7 +315,7 @@ function showCount() {
             gameCountAndFinishText.innerHTML = "終了";
             gameField.style.display = "none"
             gameFinishField.style.display = "block"
-            let result = []
+            let result;
             if (clickedPokemonIdsOnStorage != null) {
                 result = clickedPokemonIdsOnStorage.concat(clickedPokemonIds)
             } else {
