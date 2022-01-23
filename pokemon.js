@@ -14,6 +14,7 @@ const gameFinishCompileText = document.getElementById("text_finish_compile")
 const gameFinishScoreText = document.getElementById("text_finish_score")
 const gameFinishRegisterText = document.getElementById("text_finish_register")
 const gameFinishNavigationText = document.getElementById("text_finish_navigation")
+const imageFinishScoreContainer = document.getElementById("image_finish_score")
 
 
 const header = document.getElementById('header')
@@ -274,9 +275,10 @@ function finishGameFlow(){
         gameFinishText.style.display = "none"
         gameFinishField.style.display = "none"
         mainLoading.style.display = 'block'
-
+        finishGamePokemonImage()
     }else if(finishGameFlowIntervalCount === 4){
         mainLoading.style.display = "none"
+        imageFinishScoreContainer.style.display = "none"
         gameFinishField.style.display = "block"
         gameFinishScoreText.style.display = "block"
         //TODO 画像を貼る
@@ -310,9 +312,6 @@ function showRandomImages025s(){
 
     // div要素を作成
     const divPokemonRandomImage = document.createElement('div')
-    // pokemonクラスを追加 TODO add random_pokemon_box
-    divPokemonRandomImage.classList.add('random_pokemon_box')
-
     //TODO 1秒に３匹くらい表示 iが２だと同じものが表示されるので今が何秒かどうかの計算が必要(passSecを変えれば良い)
     //TODO n=0... 2n 2n+1
     for(let i = 0; i < 2; i++){
@@ -335,6 +334,24 @@ function showRandomImages025s(){
     // }
 
     gameField.appendChild(divPokemonRandomImage)
+}
+
+function finishGamePokemonImage() {
+    const result = clickedPokemonIds
+    if (result !== undefined) {
+        // div要素を作成
+        const divPokemonImage = document.createElement('div')
+        for (let i = 0; i < result.length; i++) {
+            //floorで切り捨てする　横10ずつ増やし１０超えたら縦に１０増やす
+            const multiple = Math.floor((i + 1) / 10) + 1
+            const x = 10 * ((i + 1) % 10)
+            const y = multiple * 10
+
+            divPokemonImage.innerHTML = '<img src="' + pokemonImages[result[i]-1] + '" alt="" style="top:' + y + '%; left:' + x + '%;">'
+            console.log(divPokemonImage.innerHTML)
+            imageFinishScoreContainer.appendChild(divPokemonImage)
+        }
+    }
 }
 
 getWebStorage().then(_ => {fetchPokemons().then(_ => {})})
