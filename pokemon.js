@@ -7,7 +7,12 @@ const reLoading = document.getElementById('loading_again')
 
 const scrollAreaGameStart = document.getElementById('scroll_area_game_start_screen')
 const gameField = document.getElementById('game_field')
-const gameFinish = document.getElementById('game_finish')
+const gameFinishField = document.getElementById('game_finish_field')
+const gameCountAndFinishText = document.getElementById("count_text")
+const gameFinishText = document.getElementById("text_finish")
+const gameFinishScoreText = document.getElementById("text_finish_score")
+const gameFinishRegisterText = document.getElementById("text_finish_register")
+const gameFinishNavigationText = document.getElementById("text_finish_navigation")
 
 
 const header = document.getElementById('header')
@@ -18,7 +23,11 @@ reLoading.style.display = "none"
 pokeContainerBackground.style.display = "none"
 scrollAreaGameStart.style.display = "none"
 gameField.style.display = "none"
-gameFinish.style.display = "none"
+gameFinishField.style.display = "none"
+gameFinishScoreText.style.display = "none"
+gameFinishRegisterText.style.display = "none"
+gameFinishNavigationText.style.display = "none"
+
 
 // 定数を定義 表示するポケモン数
 let pokemon_count = 250;
@@ -37,11 +46,15 @@ let clickedPokemonIdsOnStorage = []
 
 // 秒数カウント用変数
 let passSec = 0;
-let counter_starter = -1;
+let COUNTER_GAME_MAIN = -1;
 const maxCountSecond = 12;
 const countUpInterval = 0.25;
 //TODO この値が６だとPCによっては落ちるので9くらいに上げると動くと思います
 const hidePokemonSpan = 6;
+
+//gameが終わった後のFlow
+let COUNTER_GAME_FINISH = -1;
+let finishGameFlowIntervalCount = 0;
 
 // カラー
 const colors = {
@@ -166,7 +179,7 @@ function scrollToBottom() {
 fetchPokemons().then(_ => {})
 
 function onClickPokemonList() {
-    //TODO この条件は全てのクリック箇所で実装すること
+    //TODO この条件は全てのクリック箇所で実装すること reFetch処理を加える
     header.style.visibility = 'visible'
     isPokemonListScreen = true
     scrollAreaPokemonList.style.display = "block"
@@ -181,6 +194,11 @@ function onClickGame() {
     scrollAreaPokemonList.style.display = "none"
     scrollAreaGameStart.style.display = "block"
     gameField.style.display = 'none'
+    gameFinishText.style.text = "block"
+    gameFinishScoreText.style.display = "none"
+    gameFinishRegisterText.style.display = "none"
+    gameFinishNavigationText.style.display = "none"
+
 }
 
 function onClickGameStart() {
@@ -210,18 +228,18 @@ function onClickPokemon(id){
 // 繰り返し処理の開始
 function startShowing() {
     passSec = 0; // カウンタのリセット
-    counter_starter = setInterval('showCount()', countUpInterval * 1000); // タイマーをセット(1000ms間隔)
+    COUNTER_GAME_MAIN = setInterval('showCount()', countUpInterval * 1000); // タイマーをセット(1000ms間隔)
 }
 
 function showCount() {
         const restTime = maxCountSecond - passSec - 1
         if (restTime === 0) {
-            clearInterval(counter_starter)
+            clearInterval(COUNTER_GAME_MAIN)
             /*Result画面へ*/
             //TODO これを次の画面に表示する　結果も表示 21匹捕まえました　画像も表示　詳細はBoxをチェックしてね！
-            document.getElementById("count").innerHTML = "終了";
+            gameCountAndFinishText.innerHTML = "終了";
             gameField.style.display = "none"
-            gameFinish.style.display = "block"
+            gameFinishField.style.display = "block"
             //concatで配列の結合が可能 TODO jsonを配列にする処理 clickedPokemonIdsOnStorageは初回取得時にnullの可能性があるので考慮が必要
             let result = []
             if (clickedPokemonIdsOnStorage != null) {
@@ -232,11 +250,40 @@ function showCount() {
             }
             const clickedPokemonIdsJson = JSON.stringify(result);
             localStorage.setItem(KEY_CLICKED_POKEMON, clickedPokemonIdsJson);
+            COUNTER_GAME_FINISH = setInterval('finishGameFlow()', 2000); // タイマーをセット(1000ms間隔)
         } else {
             passSec += countUpInterval // カウントアップ
             showRandomImages025s()
-            if (Number.isInteger(passSec - countUpInterval)) document.getElementById("count").innerHTML = "残り時間：" + restTime + "秒";
+            if (Number.isInteger(passSec - countUpInterval)) gameCountAndFinishText.innerHTML = "残り時間：" + restTime + "秒";
         }
+}
+
+function finishGameFlow(){
+    //HACK:SetInterval内ではinnerHTMLを書き換えることはできない仕様となっているからvisibleで文字列を変える　
+    console.log(finishGameFlowIntervalCount)
+    finishGameFlowIntervalCount++
+    if(finishGameFlowIntervalCount === 1){
+        gameFinishText.style.display = "none"
+        gameFinishScoreText.style.display = "block"
+        //TODO 画像を貼る
+    }else if(finishGameFlowIntervalCount === 3){
+        gameFinishScoreText.style.display = "none"
+        gameFinishRegisterText.style.display = "block"
+    }else if(finishGameFlowIntervalCount === 4){
+        gameFinishRegisterText.style.display = "none"
+        gameFinishField.style.display = "none"
+        mainLoading.style.display = "block"
+    }else if(finishGameFlowIntervalCount === 6){
+        mainLoading.style.display = "none"
+        gameFinishField.style.display = "block"
+        gameFinishNavigationText.style.display = "block"
+    }else if(finishGameFlowIntervalCount === 7){
+        gameFinishField.style.display = "none"
+        isPokemonListScreen = true
+        gameFinishNavigationText.style.display = "none"
+        clearInterval(COUNTER_GAME_FINISH)
+        onClickPokemonList()
+    }
 }
 
 //TODO 0.25秒に一回通るようにする
