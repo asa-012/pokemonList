@@ -353,14 +353,14 @@ function finishGameFlow(){
         mainLoading.style.display = "none"
         gameFinishField.style.display = "block"
         imageFinishScoreContainer.style.display = "block"
-    }else if(finishGameFlowIntervalCount === 5){
+    }else if(finishGameFlowIntervalCount === 4){
         imageFinishScoreContainer.style.display = "none"
         gameFinishRegisterText.style.display = "block"
-    }else if(finishGameFlowIntervalCount === 6){
+    }else if(finishGameFlowIntervalCount === 5){
         gameFinishRegisterText.style.display = "none"
         gameFinishField.style.display = "none"
         mainLoading.style.display = "block"
-    }else if(finishGameFlowIntervalCount === 7){
+    }else if(finishGameFlowIntervalCount === 6){
         clearInterval(COUNTER_GAME_FINISH)
         onClickPokemonList()
     }
