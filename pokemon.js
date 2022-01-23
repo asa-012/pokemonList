@@ -33,7 +33,7 @@ gameFinishNavigationText.style.display = "none"
 
 // 定数を定義 表示するポケモン数
 let pokemon_count = 250;
-let pokemon_max_loading_count = 100;
+let pokemon_max_loading_count = 20;
 let arrivedBottomPoint = false;
 let isPokemonListScreen = true
 
@@ -79,8 +79,7 @@ const colors = {
 // colorsのkeyを配列に格納
 const main_types = Object.keys(colors)
 
-// ポケモン取得
-const fetchPokemons = async () => {
+const fetchAllPokemon = async () => {
     for (let i = 1; i <= pokemon_count; i++) {
         if (i <= pokemon_max_loading_count) {
             await getPokemon(i, true)
@@ -94,33 +93,53 @@ const fetchPokemons = async () => {
             await getPokemon(i, false)
         }
     }
-    // //追加ローディング分岐処理
-    // if (pokemon_count <= pokemon_max_loading_count) {
-    //     pokemon_count = -1
-    //     pokemon_max_loading_count = -1
-    //     //Nothing　追加ローディングなし
-    // } else if (pokemon_max_loading_count * 2 > pokemon_count) {
-    //     //300の時に190だった場合に次の追加ローディングで190まで読み込みたいから
-    //     pokemon_start_loading_count += pokemon_max_loading_count
-    //     pokemon_max_loading_count = pokemon_count
-    // } else {
-    //     //400とかだった場合に２倍の３００まで読み込む
-    //     pokemon_start_loading_count += pokemon_max_loading_count
-    //     pokemon_max_loading_count *= 2
-    // }
+}
+
+// ポケモン取得
+const fetchPokemons = async () => {
+    console.log(clickedPokemonIdsOnStorage)
+    if(clickedPokemonIdsOnStorage != null) {
+        for (let i = 0; i <= clickedPokemonIdsOnStorage.length; i++) {
+            if (i <= pokemon_max_loading_count + 1) {
+                await getPokemon(clickedPokemonIdsOnStorage[i], true)
+                console.log("finish getPokemon")
+                if (i === pokemon_max_loading_count) {
+                    scrollToBottom()
+                }else if (i === clickedPokemonIdsOnStorage.length){
+                    mainLoading.style.display = "none"
+                    pokeContainer.style.display = "block"
+                }
+            } else {
+                mainLoading.style.display = "none"
+                pokeContainer.style.display = "block"
+                reLoading.style.display = "block"
+                await getPokemon(i, false)
+            }
+        }
+    }else{
+        mainLoading.style.display = "none"
+        pokeContainer.style.display = "block"
+    }
+}
+
+async function getWebStorage() {
+    clickedPokemonIdsOnStorage = JSON.parse(localStorage.getItem(KEY_CLICKED_POKEMON))
 }
 
 const getPokemon = async (id, isShow) => {
-    const url = `https://pokeapi.co/api/v2/pokemon/${id}`
-    const res = await fetch(url)
-    const data = await res.json()
-    createPokemonCard(data, isShow)
-    //imageをゲームで使うのでurl.pngを全て格納する
-    pokemonImages.push(data.sprites['front_default'])
+    if(id !== undefined) {
+        const url = `https://pokeapi.co/api/v2/pokemon/${id}`
+        const res = await fetch(url)
+        const data = await res.json()
+        createPokemonCard(data, isShow)
+        //imageをゲームで使うのでurl.pngを全て格納する
+        pokemonImages.push(data.sprites['front_default'])
+    }
 }
 
 // ポケモンカードを作成
 const createPokemonCard = (pokemon, isShow) => {
+    console.log(pokemon)
     // div要素を作成
     const pokemonEl = document.createElement('div')
     // pokemonクラスを追加
@@ -178,7 +197,7 @@ function scrollToBottom() {
         }
     });
 }
-fetchPokemons().then(_ => {})
+getWebStorage().then(_ => {fetchPokemons().then(_ => {})})
 
 function onClickPokemonList() {
     //TODO この条件は全てのクリック箇所で実装すること reFetch処理を加える
