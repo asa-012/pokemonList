@@ -50,7 +50,6 @@ let passSec = 0;
 let COUNTER_GAME_MAIN = -1;
 const maxCountSecond = 10;
 const countUpInterval = 0.25;
-//TODO この値が６だとPCによっては落ちるので9くらいに上げると動くと思います
 
 //gameが終わった後のFlow
 let COUNTER_GAME_FINISH = -1;
@@ -73,17 +72,31 @@ const colors = {
     fighting: '#E6E0D4',
     normal: '#F5F5F5'
 }
-
 // colorsのkeyを配列に格納
 const main_types = Object.keys(colors)
 
+/**
+ * WebStorageを取得します
+ * @returns {Promise<void>}
+ */
+async function getWebStorage() {
+    clickedPokemonIdsOnStorage = JSON.parse(localStorage.getItem(KEY_CLICKED_POKEMON))
+}
+
+/**
+ * ポケモン画像全てのimageUrlをローカルに保存します
+ * @returns {Promise<void>}
+ */
 const fetchAllPokemonImage = async () => {
     for (let i = 1; i <= pokemon_count; i++) {
             await getPokemonAllImage(i)
     }
 }
 
-// ポケモン取得
+/***
+ * 対象のポケモンの情報を取得します
+ * @returns {Promise<void>}
+ */
 const fetchPokemons = async () => {
     if(clickedPokemonIdsOnStorage != null) {
         for (let i = 0; i <= clickedPokemonIdsOnStorage.length; i++) {
@@ -108,8 +121,13 @@ const fetchPokemons = async () => {
     }
 }
 
-async function getWebStorage() {
-    clickedPokemonIdsOnStorage = JSON.parse(localStorage.getItem(KEY_CLICKED_POKEMON))
+const getPokemonAllImage = async (id) => {
+    if(id !== undefined) {
+        const url = `https://pokeapi.co/api/v2/pokemon/${id}`
+        const res = await fetch(url)
+        const data = await res.json()
+        pokemonImages.push(data.sprites['front_default'])
+    }
 }
 
 const getPokemon = async (id, isShow) => {
@@ -121,16 +139,11 @@ const getPokemon = async (id, isShow) => {
     }
 }
 
-const getPokemonAllImage = async (id) => {
-    if(id !== undefined) {
-        const url = `https://pokeapi.co/api/v2/pokemon/${id}`
-        const res = await fetch(url)
-        const data = await res.json()
-        pokemonImages.push(data.sprites['front_default'])
-    }
-}
-
-// ポケモンカードを作成
+/**
+ * ポケモンのカードを作成します
+ * @param pokemon
+ * @param isShow
+ */
 const createPokemonCard = (pokemon, isShow) => {
     // div要素を作成
     const pokemonEl = document.createElement('div')
@@ -168,32 +181,43 @@ const createPokemonCard = (pokemon, isShow) => {
 
 }
 
+/**
+ * 一番下までスクロールした時に追加ローディングをします
+ * 最初の20個はfetch全てが完了していなくても表示させバックグラウンドで表示し
+ * 一番下までスクロールした時に再度残りの内容を表示させます
+ * 全てを一気に表示だとローディングが長くなるからこのようにしました
+ */
 function scrollToBottom() {
-    // 一番下までスクロールした時の数値を取得(window.innerHeight分(画面表示領域分)はスクロールをしないため引く)
-    const bodyHeight = document.body.clientHeight // bodyの高さを取得
-    const windowHeight = window.innerHeight // windowの高さを取得
+    // bodyとwindowの高さを取得し一番下のheightの値を計算します
+    const bodyHeight = document.body.clientHeight
+    const windowHeight = window.innerHeight
     let bottomPoint = bodyHeight - windowHeight
 
     window.addEventListener('scroll', () => {
         const scrollTop = document.documentElement.scrollTop;
         //一番下にスクロール&&1回でも一番下にスクロールしたか&今の画面がpokemonListかどうか
         if (scrollTop >= bottomPoint && !arrivedBottomPoint && isPokemonListScreen) {
-            //一番下にスクロールした時に5秒ローディング
+            //一番下にスクロールした時に4秒ローディング
             setTimeout(function() {
                 pokeContainerBackground.style.display = "block";
                 reLoading.style.display = "none";
-            }, 5000);
+            }, 4000);
             arrivedBottomPoint = true
         }
     });
 }
 
+/**
+ * 右上、もしくはゲーム終了時にページをリロードします
+ */
 function onClickPokemonList() {
     window.location.reload();
 }
 
+/**
+ * メニューバーのgameボタンのクリック処理
+ */
 function onClickGame() {
-    //gameの準備はこのタイミングで行う
     header.style.visibility = 'visible'
     isPokemonListScreen = false
     scrollAreaPokemonList.style.display = "none"
@@ -203,9 +227,11 @@ function onClickGame() {
     gameFinishCompileText.style.display = "none"
     gameFinishRegisterText.style.display = "none"
     gameFinishNavigationText.style.display = "none"
-
 }
 
+/**
+ * game画面のゲームスタートボタンのクリック処理
+ */
 function onClickGameStart() {
     header.style.visibility = 'hidden'
     scrollAreaGameStart.style.display = 'none'
@@ -220,34 +246,43 @@ function onClickGameStart() {
         const id = Math.floor(Math.random() * pokemon_count);
         displayPokemonIds.push(id)
     }
-
-    startShowing()
+    startShowingCounter()
 }
 
+/**
+ * ポケモンをクリックした時の関数
+ * クリックしたポケモンのidを保存します
+ * クリックしたポケモンをhide状態にします
+ * @param id
+ */
 function onClickPokemon(id){
     if(id != null) {
-        //TODO ずれの解消 -21くらいで
         clickedPokemonIds.push(id)
         document.getElementById(id).style.display = "none"
     }
 }
 
-// 繰り返し処理の開始
-function startShowing() {
+/**
+ * タイマー繰り返し処理の開始
+ */
+function startShowingCounter() {
     passSec = 0; // カウンタのリセット
-    COUNTER_GAME_MAIN = setInterval('showCount()', countUpInterval * 1000); // タイマーをセット(1000ms間隔)
+    COUNTER_GAME_MAIN = setInterval('showCount()', countUpInterval * 1000); // タイマーをセット
 }
 
+/**
+ * game用Counterの関数　
+ * countUpInterval秒ごとに実行
+ * 残り時間０になった時に終了画面に遷移し、タイマーのInterval処理を削除します
+ */
 function showCount() {
         const restTime = maxCountSecond - passSec - 1
         if (restTime === 0) {
             clearInterval(COUNTER_GAME_MAIN)
-            /*Result画面へ*/
-            //TODO これを次の画面に表示する　結果も表示 21匹捕まえました　画像も表示　詳細はBoxをチェックしてね！
+            //Result画面へ
             gameCountAndFinishText.innerHTML = "終了";
             gameField.style.display = "none"
             gameFinishField.style.display = "block"
-            //concatで配列の結合が可能 TODO jsonを配列にする処理 clickedPokemonIdsOnStorageは初回取得時にnullの可能性があるので考慮が必要
             let result = []
             if (clickedPokemonIdsOnStorage != null) {
                 result = clickedPokemonIdsOnStorage.concat(clickedPokemonIds)
@@ -256,14 +291,20 @@ function showCount() {
             }
             const clickedPokemonIdsJson = JSON.stringify(result);
             localStorage.setItem(KEY_CLICKED_POKEMON, clickedPokemonIdsJson);
-            COUNTER_GAME_FINISH = setInterval('finishGameFlow()', 1500); // タイマーをセット(1000ms間隔)
+            //タイマーをセット
+            COUNTER_GAME_FINISH = setInterval('finishGameFlow()', 1500);
         } else {
-            passSec += countUpInterval // カウントアップ
+            //カウントアップ
+            passSec += countUpInterval
             showRandomImages025s()
             if (Number.isInteger(passSec - countUpInterval)) gameCountAndFinishText.innerHTML = "残り時間：" + restTime + "秒";
         }
 }
 
+/**
+ * ゲーム終了時に1.5秒ごとにそれぞれ処理が実施されます
+ * これにより擬似アニメーションを作成しています
+ */
 function finishGameFlow(){
     //HACK:SetInterval内ではinnerHTMLを書き換えることはできない仕様となっているからvisibleで文字列を変える　
     finishGameFlowIntervalCount++
@@ -276,7 +317,6 @@ function finishGameFlow(){
         mainLoading.style.display = "none"
         gameFinishField.style.display = "block"
         imageFinishScoreContainer.style.display = "block"
-        //TODO 画像を貼る
     }else if(finishGameFlowIntervalCount === 5){
         imageFinishScoreContainer.style.display = "none"
         gameFinishRegisterText.style.display = "block"
@@ -290,11 +330,13 @@ function finishGameFlow(){
     }
 }
 
-//TODO 0.25秒に一回通るようにする
+/**
+ * 0.25秒に一回ポケモン画像を表示させる関数です
+ */
+
 function showRandomImages025s(){
     // div要素を作成
     const divPokemonRandomImage = document.createElement('div')
-    //TODO 1秒に３匹くらい表示 iが２だと同じものが表示されるので今が何秒かどうかの計算が必要(passSecを変えれば良い)
     const pokemonImageIndex = 2 * ((passSec * 4) -1);
     const displayPokemonId = displayPokemonIds[pokemonImageIndex]
     const displayPokemonImage = pokemonImages[displayPokemonId -1];
@@ -303,11 +345,16 @@ function showRandomImages025s(){
     const x = Math.floor(Math.random() * 94);
     const y = Math.floor(Math.random() * 94);
 
-    //box要素にimgタグを追加（乱数を代入した変数をポジションに設定
+    //追加したdiv要素にimgタグを追加（乱数を代入した変数をポジションに設定)
     divPokemonRandomImage.innerHTML = '<img id="' + displayPokemonId + '" src="' + displayPokemonImage + '" onclick="onClickPokemon(' + displayPokemonId + ')" alt="" style="top:'+y+'%; left:'+x+'%;">'
     gameField.appendChild(divPokemonRandomImage)
 }
 
+/**
+ * finish画面での捕まえたポケモンの情報をセットする関数
+ * １０匹ごとにポケモンを表示し１０匹超えたら次の行に表示する
+ * ０匹の時はテキストを変える　それ以外は捕まえたポケモンの数を表示する
+ */
 function finishGamePokemonImage() {
     const result = clickedPokemonIds
     if (result !== undefined) {
@@ -330,9 +377,7 @@ function finishGamePokemonImage() {
         }else{
             gameFinishPokemonCountText.innerHTML = 'あなたはポケモンを捕まえれませんでした.'
         }
-
         imageFinishScoreContainer.appendChild(divPokemonImage)
-        console.log(imageFinishScoreContainer)
     }
 }
 
