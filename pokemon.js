@@ -319,7 +319,7 @@ function finishGamePokemonImage() {
             //floorで切り捨てする　横10ずつ増やし１０超えたら縦に１０増やす
             const multiple = Math.floor(i / 10) + 1
             let x = 0
-            const y = multiple * 12
+            const y = multiple * 20
             if(multiple < 2) {
                 x = 10 * (i % 10)
             }else{
