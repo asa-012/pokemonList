@@ -12,9 +12,7 @@ const gameField = document.getElementById('game_field')
 const gameFinishField = document.getElementById('game_finish_field')
 const gameCountAndFinishText = document.getElementById("count_text")
 const gameFinishText = document.getElementById("text_finish")
-const gameFinishCompileText = document.getElementById("text_finish_compile")
 const gameFinishRegisterText = document.getElementById("text_finish_register")
-const gameFinishNavigationText = document.getElementById("text_finish_navigation")
 const imageFinishScoreContainer = document.getElementById("image_finish_score")
 const gameFinishPokemonCountText = document.getElementById("text_image_finish_score")
 
@@ -72,9 +70,7 @@ pokeContainerBackground.style.display = "none"
 scrollAreaGameStart.style.display = "none"
 gameField.style.display = "none"
 gameFinishField.style.display = "none"
-gameFinishCompileText.style.display = "none"
 gameFinishRegisterText.style.display = "none"
-gameFinishNavigationText.style.display = "none"
 imageFinishScoreContainer.style.display = "none"
 
 /**
@@ -228,9 +224,7 @@ function onClickGame() {
     scrollAreaGameStart.style.display = "block"
     gameField.style.display = 'none'
     gameFinishText.style.text = "block"
-    gameFinishCompileText.style.display = "none"
     gameFinishRegisterText.style.display = "none"
-    gameFinishNavigationText.style.display = "none"
 }
 
 /**
