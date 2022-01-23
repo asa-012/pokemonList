@@ -65,7 +65,7 @@ const colors = {
     ghost: '#800080',
     steel: '#ffffff',
     ice: '#faebd7',
-    dark: '#00008b',
+    dark: '#483d8b',
     unknown:'#b8860b',
     shadow:'#696969'
 }
@@ -191,7 +191,7 @@ const createPokemonCard = (id , name , image , type , species, description, isSh
 
     const description1Line = description.slice(0, 21)
     const add = '<br>'
-    const description2Line = description.slice(12)
+    const description2Line = description.slice(21)
     const descriptionResult = description1Line + add + description2Line
 
     //TODO        <img src=${image} alt=""> img-containerのdivの間に

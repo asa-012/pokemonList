@@ -44,6 +44,11 @@ li {
     font-size: 14px;
 }
 
+.text_no_pokemon {
+    text-align: center;
+    font-size: 40px;
+}
+
 /*game*/
 .scroll_area_game_start_screen{
     margin-top: 140px;
@@ -63,6 +68,7 @@ li {
     transition    : .3s;         /* なめらか変化 */
     box-shadow    : 3px 3px 3px #666666;  /* 影の設定 */
     border        : 2px solid #66ff66;    /* 枠の指定 */
+    background-color: blue;
 }
 
 .button_start_game :hover {
@@ -146,11 +152,6 @@ li {
     max-width: 1200px;
 }
 
-.text_no_pokemon {
-    text-align: center;
-    font-size: 40px;
-}
-
 .poke-container-background {
     justify-content: center;
     margin: 0 auto;
@@ -161,7 +162,7 @@ li {
     background-color: #eee;
     border-radius: 10px;
     box-shadow: 0 3px 15px rgba(100, 100, 100, 0.5);
-    margin: 10px 30%;
+    margin: 10px 20%;
     padding: 20px;
     text-align: center;
 }
@@ -172,6 +173,7 @@ li {
     width: 120px;
     height: 120px;
     text-align: center;
+    margin: 0 auto;
 }
 
 .pokemon .img-container img {
