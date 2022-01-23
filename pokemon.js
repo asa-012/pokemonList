@@ -33,7 +33,7 @@ let displayPokemonIds = []
 let pokemonImageIndex = 0
 let clickedPokemonIds = []
 const KEY_CLICKED_POKEMON = "key_clicked_pokemon"
-let clickedPokemonOnStorage = []
+let clickedPokemonIdsOnStorage = []
 
 // 秒数カウント用変数
 let passSec = 0;
@@ -42,6 +42,7 @@ const maxCountSecond = 12;
 const countUpInterval = 0.25;
 //TODO この値が６だとPCによっては落ちるので9くらいに上げると動くと思います
 const hidePokemonSpan = 6;
+let isFinish = false
 
 // カラー
 const colors = {
@@ -190,6 +191,9 @@ function onClickGameStart() {
 
     //初期化
     displayPokemonIds = []
+    isFinish = false
+    clickedPokemonIdsOnStorage = JSON.parse(localStorage.getItem(KEY_CLICKED_POKEMON))
+    console.log(localStorage.getItem(KEY_CLICKED_POKEMON))
 
     for (let i = 0;i<maxDisplayPokemonGameCount ;i++){
         //TODO ポケモンは被っても良いとする 今はとりあえず100匹ぶんなので変更する
@@ -212,21 +216,30 @@ function startShowing() {
 }
 
 function showCount() {
-    const restTime = maxCountSecond - passSec - 1
-    if (restTime === 0) {
-        /*Result画面へ*/
-        //TODO これを次の画面に表示する　結果も表示 21匹捕まえました　画像も表示　詳細はBoxをチェックしてね！
-        document.getElementById("count").innerHTML = "終了";
-        //WebStorageにクリックしたポケモンのidリストを保存
-        let json = JSON.stringify(clickedPokemonIds, undefined, 1);
-        localStorage.setItem(KEY_CLICKED_POKEMON, json);
-        counter_starter = -1
-        gameField.style.display = "none"
-        gameFinish.style.display = "block"
-    } else {
-        passSec += countUpInterval // カウントアップ
-        showRandomImages025s()
-        if(Number.isInteger(passSec - countUpInterval)) document.getElementById("count").innerHTML = "残り時間：" + restTime + "秒";
+    if(!isFinish) {
+        const restTime = maxCountSecond - passSec - 1
+        if (restTime === 0) {
+            /*Result画面へ*/
+            //TODO これを次の画面に表示する　結果も表示 21匹捕まえました　画像も表示　詳細はBoxをチェックしてね！
+            document.getElementById("count").innerHTML = "終了";
+            counter_starter = -1
+            gameField.style.display = "none"
+            gameFinish.style.display = "block"
+            //concatで配列の結合が可能 TODO jsonを配列にする処理 clickedPokemonIdsOnStorageは初回取得時にnullの可能性があるので考慮が必要
+            let result = []
+            if (clickedPokemonIdsOnStorage != null) {
+                //TODO ここでカウントの値が返ってきている
+                result = clickedPokemonIdsOnStorage.concat(clickedPokemonIds)
+            } else {
+                result = clickedPokemonIds
+            }
+            const clickedPokemonIdsJson = JSON.stringify(result);
+            localStorage.setItem(KEY_CLICKED_POKEMON, clickedPokemonIdsJson);
+        } else {
+            passSec += countUpInterval // カウントアップ
+            showRandomImages025s()
+            if (Number.isInteger(passSec - countUpInterval)) document.getElementById("count").innerHTML = "残り時間：" + restTime + "秒";
+        }
     }
 }
 
