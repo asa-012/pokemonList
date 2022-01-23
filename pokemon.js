@@ -10,6 +10,7 @@ const gameField = document.getElementById('game_field')
 const gameFinishField = document.getElementById('game_finish_field')
 const gameCountAndFinishText = document.getElementById("count_text")
 const gameFinishText = document.getElementById("text_finish")
+const gameFinishCompileText = document.getElementById("text_finish_compile")
 const gameFinishScoreText = document.getElementById("text_finish_score")
 const gameFinishRegisterText = document.getElementById("text_finish_register")
 const gameFinishNavigationText = document.getElementById("text_finish_navigation")
@@ -24,6 +25,7 @@ pokeContainerBackground.style.display = "none"
 scrollAreaGameStart.style.display = "none"
 gameField.style.display = "none"
 gameFinishField.style.display = "none"
+gameFinishCompileText.style.display = "none"
 gameFinishScoreText.style.display = "none"
 gameFinishRegisterText.style.display = "none"
 gameFinishNavigationText.style.display = "none"
@@ -195,6 +197,7 @@ function onClickGame() {
     scrollAreaGameStart.style.display = "block"
     gameField.style.display = 'none'
     gameFinishText.style.text = "block"
+    gameFinishCompileText.style.display = "none"
     gameFinishScoreText.style.display = "none"
     gameFinishRegisterText.style.display = "none"
     gameFinishNavigationText.style.display = "none"
@@ -264,18 +267,16 @@ function finishGameFlow(){
     finishGameFlowIntervalCount++
     if(finishGameFlowIntervalCount === 1){
         gameFinishText.style.display = "none"
-        gameFinishScoreText.style.display = "block"
+        gameFinishCompileText.style.display = "block"
         //TODO 画像を貼る
     }else if(finishGameFlowIntervalCount === 3){
+        gameFinishCompileText.style.display = "none"
+        gameFinishScoreText.style.display = "block"
+    }else if(finishGameFlowIntervalCount === 5){
         gameFinishScoreText.style.display = "none"
         gameFinishRegisterText.style.display = "block"
-    }else if(finishGameFlowIntervalCount === 4){
-        gameFinishRegisterText.style.display = "none"
-        gameFinishField.style.display = "none"
-        mainLoading.style.display = "block"
     }else if(finishGameFlowIntervalCount === 6){
-        mainLoading.style.display = "none"
-        gameFinishField.style.display = "block"
+        gameFinishRegisterText.style.display = "none"
         gameFinishNavigationText.style.display = "block"
     }else if(finishGameFlowIntervalCount === 7){
         gameFinishField.style.display = "none"
