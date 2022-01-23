@@ -32,10 +32,6 @@ let clickedPokemonIds = []
 const KEY_CLICKED_POKEMON = "key_clicked_pokemon"
 let clickedPokemonIdsOnStorage = []
 
-//typeの日本語訳用リスト
-let typeListJp;
-let typeListEn;
-
 // 秒数カウント用変数
 let passSec = 0;
 let COUNTER_GAME_MAIN = -1;
