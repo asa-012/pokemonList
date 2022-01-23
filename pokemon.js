@@ -119,8 +119,6 @@ const getPokemon = async (id, isShow) => {
         const res = await fetch(url)
         const data = await res.json()
         createPokemonCard(data, isShow)
-        //imageをゲームで使うのでurl.pngを全て格納する
-        pokemonImages.push(data.sprites['front_default'])
     }
 }
 
@@ -233,8 +231,9 @@ function onClickPokemon(id){
         //TODO ずれの解消 -21くらいで
         clickedPokemonIds.push(id)
         document.getElementById(id).style.display = "none"
-        console.log(clickedPokemonIds)
-        console.log(pokemonImages[id])
+        console.log(pokemonImages)
+        // console.log(clickedPokemonIds)
+        // console.log(pokemonImages[id])
     }
 }
 
