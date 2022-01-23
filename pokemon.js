@@ -251,8 +251,8 @@ function showCount() {
             gameFinishField.style.display = "block"
             //concatで配列の結合が可能 TODO jsonを配列にする処理 clickedPokemonIdsOnStorageは初回取得時にnullの可能性があるので考慮が必要
             let result = []
+            console.log(clickedPokemonIds)
             if (clickedPokemonIdsOnStorage != null) {
-                //TODO ここでカウントの値が返ってきている
                 result = clickedPokemonIdsOnStorage.concat(clickedPokemonIds)
             } else {
                 result = clickedPokemonIds
@@ -316,18 +316,19 @@ function showRandomImages025s(){
     for(let i = 0; i < 2; i++){
         //TODo passSec = 0.5 countUpInterval = 0.25
         pokemonImageIndex = 2 * ((passSec * 4) -1) + i;
-        const displayPokemonImage = pokemonImages[displayPokemonIds[pokemonImageIndex]];
+        const displayPokemonId = displayPokemonIds[pokemonImageIndex]
+        const displayPokemonImage = pokemonImages[displayPokemonId];
 
         //縦横軸用の乱数生成
         const x = Math.floor(Math.random() * 94);
         const y = Math.floor(Math.random() * 94);
 
         //box要素にimgタグを追加（乱数を代入した変数をポジションに設定）1回しかクリックさせないためにdisabledを加えた
-        divPokemonRandomImage.innerHTML = '<img id="' + pokemonImageIndex + '" src="' + displayPokemonImage + '" onclick="onClickPokemon(pokemonImageIndex)" alt="" style="top:'+y+'%; left:'+x+'%;">'
+        divPokemonRandomImage.innerHTML = '<img id="' + displayPokemonId + '" src="' + displayPokemonImage + '" onclick="onClickPokemon(pokemonImageIndex)" alt="" style="top:'+y+'%; left:'+x+'%;">'
     }
     //hidePokemonSpan分のindexが離れたものはhide状態にします
     if(pokemonImageIndex >= hidePokemonSpan){
-        document.getElementById((pokemonImageIndex - hidePokemonSpan).toString()).style.display = "none"
+        document.getElementById(displayPokemonIds[pokemonImageIndex - hidePokemonSpan]).style.display = "none"
     }
 
     gameField.appendChild(divPokemonRandomImage)
