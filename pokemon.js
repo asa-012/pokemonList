@@ -5,21 +5,43 @@ const pokeContainerBackground = document.getElementById('poke-container_backgrou
 const mainLoading = document.getElementById('loading_main')
 const reLoading = document.getElementById('loading_again')
 
-const scrollAreaGame = document.getElementById('scroll_area_game')
-const buttonGame = document.getElementById('button_game')
+const scrollAreaGameStart = document.getElementById('scroll_area_game_start_screen')
+const gameField = document.getElementById('game_field')
+const gameFinish = document.getElementById('game_finish')
+
+
+const header = document.getElementById('header')
 
 // noneで非表示 blockで表示
 pokeContainer.style.display = "none"
 reLoading.style.display = "none"
 pokeContainerBackground.style.display = "none"
-scrollAreaGame.style.display = "none"
+scrollAreaGameStart.style.display = "none"
+gameField.style.display = "none"
+gameFinish.style.display = "none"
 
-// 定数を定義
-// 表示するポケモン数
+// 定数を定義 表示するポケモン数
 let pokemon_count = 250;
 let pokemon_max_loading_count = 100;
 let arrivedBottomPoint = false;
 let isPokemonListScreen = true
+
+//imageの全配列
+let pokemonImages = []
+const maxDisplayPokemonGameCount = 90
+let displayPokemonIds = []
+let pokemonImageIndex = 0
+let clickedPokemonIds = []
+const KEY_CLICKED_POKEMON = "key_clicked_pokemon"
+let clickedPokemonIdsOnStorage = []
+
+// 秒数カウント用変数
+let passSec = 0;
+let counter_starter = -1;
+const maxCountSecond = 12;
+const countUpInterval = 0.25;
+//TODO この値が６だとPCによっては落ちるので9くらいに上げると動くと思います
+const hidePokemonSpan = 6;
 
 // カラー
 const colors = {
@@ -45,16 +67,16 @@ const main_types = Object.keys(colors)
 // ポケモン取得
 const fetchPokemons = async () => {
     for (let i = 1; i <= pokemon_count; i++) {
-        if(i <= pokemon_max_loading_count) {
-            await getPokemon(i,true)
-            if(i === pokemon_max_loading_count){
+        if (i <= pokemon_max_loading_count) {
+            await getPokemon(i, true)
+            if (i === pokemon_max_loading_count) {
                 scrollToBottom()
             }
-        }else{
+        } else {
             mainLoading.remove()
             pokeContainer.style.display = "block"
             reLoading.style.display = "block"
-            await getPokemon(i,false)
+            await getPokemon(i, false)
         }
     }
     // //追加ローディング分岐処理
@@ -73,15 +95,17 @@ const fetchPokemons = async () => {
     // }
 }
 
-const getPokemon = async (id,isShow) => {
+const getPokemon = async (id, isShow) => {
     const url = `https://pokeapi.co/api/v2/pokemon/${id}`
     const res = await fetch(url)
     const data = await res.json()
-    createPokemonCard(data,isShow)
+    createPokemonCard(data, isShow)
+    //imageをゲームで使うのでurl.pngを全て格納する
+    pokemonImages.push(data.sprites['front_default'])
 }
 
 // ポケモンカードを作成
-const createPokemonCard = (pokemon,isShow) => {
+const createPokemonCard = (pokemon, isShow) => {
     // div要素を作成
     const pokemonEl = document.createElement('div')
     // pokemonクラスを追加
@@ -109,17 +133,17 @@ const createPokemonCard = (pokemon,isShow) => {
     </div>
     `
 
-    if(isShow){
+    if (isShow) {
         // poke_containerの子要素として追加
         pokeContainer.appendChild(pokemonEl)
-    }else{
+    } else {
         pokeContainerBackground.appendChild(pokemonEl)
     }
 
 }
 
-function scrollToBottom(){
-// 一番下までスクロールした時の数値を取得(window.innerHeight分(画面表示領域分)はスクロールをしないため引く)
+function scrollToBottom() {
+    // 一番下までスクロールした時の数値を取得(window.innerHeight分(画面表示領域分)はスクロールをしないため引く)
     const bodyHeight = document.body.clientHeight // bodyの高さを取得
     const windowHeight = window.innerHeight // windowの高さを取得
     let bottomPoint = bodyHeight - windowHeight
@@ -139,16 +163,119 @@ function scrollToBottom(){
         }
     });
 }
-fetchPokemons()
+fetchPokemons().then(_ => {})
 
-function onClickPokemonList(){
+function onClickPokemonList() {
+    //TODO この条件は全てのクリック箇所で実装すること
+    header.style.visibility = 'visible'
     isPokemonListScreen = true
     scrollAreaPokemonList.style.display = "block"
-    scrollAreaGame.style.display = "none"
+    scrollAreaGameStart.style.display = "none"
+    gameField.style.display = 'none'
 }
 
-function onClickGame(){
+function onClickGame() {
+    //gameの準備はこのタイミングで行う
+    header.style.visibility = 'visible'
     isPokemonListScreen = false
     scrollAreaPokemonList.style.display = "none"
-    scrollAreaGame.style.display = "block"
+    scrollAreaGameStart.style.display = "block"
+    gameField.style.display = 'none'
+}
+
+function onClickGameStart() {
+    header.style.visibility = 'hidden'
+    scrollAreaGameStart.style.display = 'none'
+    gameField.style.display = 'block'
+
+    //初期化
+    displayPokemonIds = []
+    clickedPokemonIdsOnStorage = JSON.parse(localStorage.getItem(KEY_CLICKED_POKEMON))
+    console.log(localStorage.getItem(KEY_CLICKED_POKEMON))
+
+    for (let i = 0;i<maxDisplayPokemonGameCount ;i++){
+        //TODO ポケモンは被っても良いとする 今はとりあえず100匹ぶんなので変更する
+        const id = Math.floor(Math.random() * 100);
+        displayPokemonIds.push(id)
+    }
+
+    startShowing()
+}
+
+function onClickPokemon(id){
+    clickedPokemonIds.push(id)
+    document.getElementById(id).style.display = "none"
+}
+
+// 繰り返し処理の開始
+function startShowing() {
+    passSec = 0; // カウンタのリセット
+    counter_starter = setInterval('showCount()', countUpInterval * 1000); // タイマーをセット(1000ms間隔)
+}
+
+function showCount() {
+        const restTime = maxCountSecond - passSec - 1
+        if (restTime === 0) {
+            clearInterval(counter_starter)
+            /*Result画面へ*/
+            //TODO これを次の画面に表示する　結果も表示 21匹捕まえました　画像も表示　詳細はBoxをチェックしてね！
+            document.getElementById("count").innerHTML = "終了";
+            gameField.style.display = "none"
+            gameFinish.style.display = "block"
+            //concatで配列の結合が可能 TODO jsonを配列にする処理 clickedPokemonIdsOnStorageは初回取得時にnullの可能性があるので考慮が必要
+            let result = []
+            if (clickedPokemonIdsOnStorage != null) {
+                //TODO ここでカウントの値が返ってきている
+                result = clickedPokemonIdsOnStorage.concat(clickedPokemonIds)
+            } else {
+                result = clickedPokemonIds
+            }
+            const clickedPokemonIdsJson = JSON.stringify(result);
+            localStorage.setItem(KEY_CLICKED_POKEMON, clickedPokemonIdsJson);
+        } else {
+            passSec += countUpInterval // カウントアップ
+            showRandomImages025s()
+            if (Number.isInteger(passSec - countUpInterval)) document.getElementById("count").innerHTML = "残り時間：" + restTime + "秒";
+        }
+}
+
+//TODO 0.25秒に一回通るようにする
+function showRandomImages025s(){
+    //1.fetch時に、事前にpictureUrlのリストを作っておく
+    //2.idをランダムで生成する　約180匹
+    //ランダムで生成したidをpictureUrlのindexに指定して取り出す
+    //ランダムな場所に表示させる
+    //タイマーで良いタイミングで消す　それを繰り返す
+    //5.onClickでidを渡して他の変数に格納する
+    //6.結果が出たらWebStorageに保存する
+    //TODO 7.BoxボタンクリックでWebStorageに入っているidを再Fetchする
+    //TODo 8.fetch処理を書き換える　できれば全fetchで表示は200くらい
+    //TODo 最後の終了画面ではcounterで1秒ごとに動かして結果と遷移しますとmainloadとBox画面に自動遷移
+
+
+    // div要素を作成
+    const divPokemonRandomImage = document.createElement('div')
+    // pokemonクラスを追加 TODO add random_pokemon_box
+    divPokemonRandomImage.classList.add('random_pokemon_box')
+
+    //TODO 1秒に３匹くらい表示 iが２だと同じものが表示されるので今が何秒かどうかの計算が必要(passSecを変えれば良い)
+    //TODO n=0... 2n 2n+1
+    for(let i = 0; i < 2; i++){
+        //TODo passSec = 0.5 countUpInterval = 0.25
+        pokemonImageIndex = 2 * ((passSec * 4) -1) + i;
+        const displayPokemonImage = pokemonImages[displayPokemonIds[pokemonImageIndex]];
+
+        //縦横軸用の乱数生成
+        const x = Math.floor(Math.random() * 94);
+        const y = Math.floor(Math.random() * 94);
+
+        //box要素にimgタグを追加（乱数を代入した変数をポジションに設定）1回しかクリックさせないためにdisabledを加えた
+        divPokemonRandomImage.innerHTML = '<img id="' + pokemonImageIndex + '" src="' + displayPokemonImage + '" onclick="onClickPokemon(pokemonImageIndex)" alt="" style="top:'+y+'%; left:'+x+'%;">'
+    }
+    //hidePokemonSpan分のindexが離れたものはhide状態にします
+    if(pokemonImageIndex >= hidePokemonSpan){
+        document.getElementById((pokemonImageIndex - hidePokemonSpan).toString()).style.display = "none"
+    }
+
+    gameField.appendChild(divPokemonRandomImage)
 }
