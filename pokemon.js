@@ -2,6 +2,8 @@
 const scrollAreaPokemonList = document.getElementById('scroll_area_pokemon_list')
 const pokeContainer = document.getElementById('poke-container')
 const pokeContainerBackground = document.getElementById('poke-container_background')
+const textNoPokemon = document.getElementById('text_no_pokemon')
+
 const mainLoading = document.getElementById('loading_main')
 const reLoading = document.getElementById('loading_again')
 
@@ -10,38 +12,22 @@ const gameField = document.getElementById('game_field')
 const gameFinishField = document.getElementById('game_finish_field')
 const gameCountAndFinishText = document.getElementById("count_text")
 const gameFinishText = document.getElementById("text_finish")
-const gameFinishCompileText = document.getElementById("text_finish_compile")
-const gameFinishScoreText = document.getElementById("text_finish_score")
 const gameFinishRegisterText = document.getElementById("text_finish_register")
-const gameFinishNavigationText = document.getElementById("text_finish_navigation")
-
+const imageFinishScoreContainer = document.getElementById("image_finish_score")
+const gameFinishPokemonCountText = document.getElementById("text_image_finish_score")
 
 const header = document.getElementById('header')
 
-// noneで非表示 blockで表示
-pokeContainer.style.display = "none"
-reLoading.style.display = "none"
-pokeContainerBackground.style.display = "none"
-scrollAreaGameStart.style.display = "none"
-gameField.style.display = "none"
-gameFinishField.style.display = "none"
-gameFinishCompileText.style.display = "none"
-gameFinishScoreText.style.display = "none"
-gameFinishRegisterText.style.display = "none"
-gameFinishNavigationText.style.display = "none"
-
-
-// 定数を定義 表示するポケモン数
-let pokemon_count = 250;
-let pokemon_max_loading_count = 100;
+// 定数を定義 表示するポケモンidのMax数
+let pokemon_count = 720;
+let pokemon_max_loading_count = 20;
 let arrivedBottomPoint = false;
 let isPokemonListScreen = true
 
 //imageの全配列
 let pokemonImages = []
-const maxDisplayPokemonGameCount = 90
+const maxDisplayPokemonGameCount = 80
 let displayPokemonIds = []
-let pokemonImageIndex = 0
 let clickedPokemonIds = []
 const KEY_CLICKED_POKEMON = "key_clicked_pokemon"
 let clickedPokemonIdsOnStorage = []
@@ -49,10 +35,8 @@ let clickedPokemonIdsOnStorage = []
 // 秒数カウント用変数
 let passSec = 0;
 let COUNTER_GAME_MAIN = -1;
-const maxCountSecond = 12;
+const maxCountSecond = 10;
 const countUpInterval = 0.25;
-//TODO この値が６だとPCによっては落ちるので9くらいに上げると動くと思います
-const hidePokemonSpan = 6;
 
 //gameが終わった後のFlow
 let COUNTER_GAME_FINISH = -1;
@@ -75,51 +59,91 @@ const colors = {
     fighting: '#E6E0D4',
     normal: '#F5F5F5'
 }
-
 // colorsのkeyを配列に格納
 const main_types = Object.keys(colors)
 
-// ポケモン取得
-const fetchPokemons = async () => {
+// noneで非表示 blockで表示
+pokeContainer.style.display = "none"
+textNoPokemon.style.display = "none"
+reLoading.style.display = "none"
+pokeContainerBackground.style.display = "none"
+scrollAreaGameStart.style.display = "none"
+gameField.style.display = "none"
+gameFinishField.style.display = "none"
+gameFinishRegisterText.style.display = "none"
+imageFinishScoreContainer.style.display = "none"
+
+/**
+ * WebStorageを取得します
+ * @returns {Promise<void>}
+ */
+async function getWebStorage() {
+    clickedPokemonIdsOnStorage = JSON.parse(localStorage.getItem(KEY_CLICKED_POKEMON))
+}
+
+/**
+ * ポケモン画像全てのimageUrlをローカルに保存します
+ * @returns {Promise<void>}
+ */
+const fetchAllPokemonImage = async () => {
     for (let i = 1; i <= pokemon_count; i++) {
-        if (i <= pokemon_max_loading_count) {
-            await getPokemon(i, true)
-            if (i === pokemon_max_loading_count) {
-                scrollToBottom()
-            }
-        } else {
-            mainLoading.remove()
-            pokeContainer.style.display = "block"
-            reLoading.style.display = "block"
-            await getPokemon(i, false)
-        }
+            await getPokemonAllImage(i)
     }
-    // //追加ローディング分岐処理
-    // if (pokemon_count <= pokemon_max_loading_count) {
-    //     pokemon_count = -1
-    //     pokemon_max_loading_count = -1
-    //     //Nothing　追加ローディングなし
-    // } else if (pokemon_max_loading_count * 2 > pokemon_count) {
-    //     //300の時に190だった場合に次の追加ローディングで190まで読み込みたいから
-    //     pokemon_start_loading_count += pokemon_max_loading_count
-    //     pokemon_max_loading_count = pokemon_count
-    // } else {
-    //     //400とかだった場合に２倍の３００まで読み込む
-    //     pokemon_start_loading_count += pokemon_max_loading_count
-    //     pokemon_max_loading_count *= 2
-    // }
+}
+
+/***
+ * 対象のポケモンの情報を取得します
+ * @returns {Promise<void>}
+ */
+const fetchPokemons = async () => {
+    if(clickedPokemonIdsOnStorage != null) {
+        for (let i = 0; i <= clickedPokemonIdsOnStorage.length; i++) {
+            if (i <= pokemon_max_loading_count + 1) {
+                await getPokemon(clickedPokemonIdsOnStorage[i], true)
+                if (i === pokemon_max_loading_count) {
+                    scrollToBottom()
+                }else if (i === clickedPokemonIdsOnStorage.length){
+                    mainLoading.style.display = "none"
+                    pokeContainer.style.display = "block"
+                }
+            } else {
+                mainLoading.style.display = "none"
+                pokeContainer.style.display = "block"
+                reLoading.style.display = "block"
+                await getPokemon(clickedPokemonIdsOnStorage[i], false)
+            }
+        }
+    }else{
+        mainLoading.style.display = "none"
+        pokeContainer.style.display = "block"
+        textNoPokemon.style.display = "block"
+        textNoPokemon.innerHTML = "ゲームをしてポケモンを入手しましょう！<br>右上のメニューから参加できます"
+    }
+}
+
+const getPokemonAllImage = async (id) => {
+    if(id !== undefined) {
+        const url = `https://pokeapi.co/api/v2/pokemon/${id}`
+        const res = await fetch(url)
+        const data = await res.json()
+        pokemonImages.push(data.sprites['front_default'])
+    }
 }
 
 const getPokemon = async (id, isShow) => {
-    const url = `https://pokeapi.co/api/v2/pokemon/${id}`
-    const res = await fetch(url)
-    const data = await res.json()
-    createPokemonCard(data, isShow)
-    //imageをゲームで使うのでurl.pngを全て格納する
-    pokemonImages.push(data.sprites['front_default'])
+    if(id !== undefined) {
+        const url = `https://pokeapi.co/api/v2/pokemon/${id}`
+        const res = await fetch(url)
+        const data = await res.json()
+        createPokemonCard(data, isShow)
+    }
 }
 
-// ポケモンカードを作成
+/**
+ * ポケモンのカードを作成します
+ * @param pokemon
+ * @param isShow
+ */
 const createPokemonCard = (pokemon, isShow) => {
     // div要素を作成
     const pokemonEl = document.createElement('div')
@@ -157,53 +181,55 @@ const createPokemonCard = (pokemon, isShow) => {
 
 }
 
+/**
+ * 一番下までスクロールした時に追加ローディングをします
+ * 最初の20個はfetch全てが完了していなくても表示させバックグラウンドで表示し
+ * 一番下までスクロールした時に再度残りの内容を表示させます
+ * 全てを一気に表示だとローディングが長くなるからこのようにしました
+ */
 function scrollToBottom() {
-    // 一番下までスクロールした時の数値を取得(window.innerHeight分(画面表示領域分)はスクロールをしないため引く)
-    const bodyHeight = document.body.clientHeight // bodyの高さを取得
-    const windowHeight = window.innerHeight // windowの高さを取得
+    // bodyとwindowの高さを取得し一番下のheightの値を計算します
+    const bodyHeight = document.body.clientHeight
+    const windowHeight = window.innerHeight
     let bottomPoint = bodyHeight - windowHeight
 
     window.addEventListener('scroll', () => {
         const scrollTop = document.documentElement.scrollTop;
-        console.log(scrollTop)
         //一番下にスクロール&&1回でも一番下にスクロールしたか&今の画面がpokemonListかどうか
         if (scrollTop >= bottomPoint && !arrivedBottomPoint && isPokemonListScreen) {
-            console.log("bottom")
-            //一番下にスクロールした時に5秒ローディング
+            //一番下にスクロールした時に4秒ローディング
             setTimeout(function() {
                 pokeContainerBackground.style.display = "block";
                 reLoading.style.display = "none";
-            }, 5000);
+            }, 4000);
             arrivedBottomPoint = true
         }
     });
 }
-fetchPokemons().then(_ => {})
 
+/**
+ * 右上、もしくはゲーム終了時にページをリロードします
+ */
 function onClickPokemonList() {
-    //TODO この条件は全てのクリック箇所で実装すること reFetch処理を加える
-    header.style.visibility = 'visible'
-    isPokemonListScreen = true
-    scrollAreaPokemonList.style.display = "block"
-    scrollAreaGameStart.style.display = "none"
-    gameField.style.display = 'none'
+    window.location.reload();
 }
 
+/**
+ * メニューバーのgameボタンのクリック処理
+ */
 function onClickGame() {
-    //gameの準備はこのタイミングで行う
     header.style.visibility = 'visible'
     isPokemonListScreen = false
     scrollAreaPokemonList.style.display = "none"
     scrollAreaGameStart.style.display = "block"
     gameField.style.display = 'none'
     gameFinishText.style.text = "block"
-    gameFinishCompileText.style.display = "none"
-    gameFinishScoreText.style.display = "none"
     gameFinishRegisterText.style.display = "none"
-    gameFinishNavigationText.style.display = "none"
-
 }
 
+/**
+ * game画面のゲームスタートボタンのクリック処理
+ */
 function onClickGameStart() {
     header.style.visibility = 'hidden'
     scrollAreaGameStart.style.display = 'none'
@@ -212,118 +238,146 @@ function onClickGameStart() {
     //初期化
     displayPokemonIds = []
     clickedPokemonIdsOnStorage = JSON.parse(localStorage.getItem(KEY_CLICKED_POKEMON))
-    console.log(localStorage.getItem(KEY_CLICKED_POKEMON))
 
     for (let i = 0;i<maxDisplayPokemonGameCount ;i++){
-        //TODO ポケモンは被っても良いとする 今はとりあえず100匹ぶんなので変更する
-        const id = Math.floor(Math.random() * 100);
+        //ポケモンは被っても良いとする
+        const id = Math.floor(Math.random() * pokemon_count);
         displayPokemonIds.push(id)
     }
-
-    startShowing()
+    startShowingCounter()
 }
 
+/**
+ * ポケモンをクリックした時の関数
+ * クリックしたポケモンのidを保存します
+ * クリックしたポケモンをhide状態にします
+ * @param id
+ */
 function onClickPokemon(id){
-    clickedPokemonIds.push(id)
-    document.getElementById(id).style.display = "none"
+    if(id != null) {
+        clickedPokemonIds.push(id)
+        document.getElementById(id).style.display = "none"
+    }
 }
 
-// 繰り返し処理の開始
-function startShowing() {
+/**
+ * タイマー繰り返し処理の開始
+ */
+function startShowingCounter() {
     passSec = 0; // カウンタのリセット
-    COUNTER_GAME_MAIN = setInterval('showCount()', countUpInterval * 1000); // タイマーをセット(1000ms間隔)
+    COUNTER_GAME_MAIN = setInterval('showCount()', countUpInterval * 1000); // タイマーをセット
 }
 
+/**
+ * game用Counterの関数　
+ * countUpInterval秒ごとに実行
+ * 残り時間０になった時に終了画面に遷移し、タイマーのInterval処理を削除します
+ */
 function showCount() {
         const restTime = maxCountSecond - passSec - 1
         if (restTime === 0) {
             clearInterval(COUNTER_GAME_MAIN)
-            /*Result画面へ*/
-            //TODO これを次の画面に表示する　結果も表示 21匹捕まえました　画像も表示　詳細はBoxをチェックしてね！
+            //Result画面へ
             gameCountAndFinishText.innerHTML = "終了";
             gameField.style.display = "none"
             gameFinishField.style.display = "block"
-            //concatで配列の結合が可能 TODO jsonを配列にする処理 clickedPokemonIdsOnStorageは初回取得時にnullの可能性があるので考慮が必要
             let result = []
             if (clickedPokemonIdsOnStorage != null) {
-                //TODO ここでカウントの値が返ってきている
                 result = clickedPokemonIdsOnStorage.concat(clickedPokemonIds)
             } else {
                 result = clickedPokemonIds
             }
             const clickedPokemonIdsJson = JSON.stringify(result);
             localStorage.setItem(KEY_CLICKED_POKEMON, clickedPokemonIdsJson);
-            COUNTER_GAME_FINISH = setInterval('finishGameFlow()', 2000); // タイマーをセット(1000ms間隔)
+            //タイマーをセット
+            COUNTER_GAME_FINISH = setInterval('finishGameFlow()', 1500);
         } else {
-            passSec += countUpInterval // カウントアップ
+            //カウントアップ
+            passSec += countUpInterval
             showRandomImages025s()
             if (Number.isInteger(passSec - countUpInterval)) gameCountAndFinishText.innerHTML = "残り時間：" + restTime + "秒";
         }
 }
 
+/**
+ * ゲーム終了時に1.5秒ごとにそれぞれ処理が実施されます
+ * これにより擬似アニメーションを作成しています
+ */
 function finishGameFlow(){
     //HACK:SetInterval内ではinnerHTMLを書き換えることはできない仕様となっているからvisibleで文字列を変える　
-    console.log(finishGameFlowIntervalCount)
     finishGameFlowIntervalCount++
     if(finishGameFlowIntervalCount === 1){
         gameFinishText.style.display = "none"
-        gameFinishCompileText.style.display = "block"
-        //TODO 画像を貼る
-    }else if(finishGameFlowIntervalCount === 3){
-        gameFinishCompileText.style.display = "none"
-        gameFinishScoreText.style.display = "block"
+        gameFinishField.style.display = "none"
+        mainLoading.style.display = 'block'
+        finishGamePokemonImage()
+    }else if(finishGameFlowIntervalCount === 2){
+        mainLoading.style.display = "none"
+        gameFinishField.style.display = "block"
+        imageFinishScoreContainer.style.display = "block"
     }else if(finishGameFlowIntervalCount === 5){
-        gameFinishScoreText.style.display = "none"
+        imageFinishScoreContainer.style.display = "none"
         gameFinishRegisterText.style.display = "block"
     }else if(finishGameFlowIntervalCount === 6){
         gameFinishRegisterText.style.display = "none"
-        gameFinishNavigationText.style.display = "block"
-    }else if(finishGameFlowIntervalCount === 7){
         gameFinishField.style.display = "none"
-        isPokemonListScreen = true
-        gameFinishNavigationText.style.display = "none"
+        mainLoading.style.display = "block"
+    }else if(finishGameFlowIntervalCount === 7){
         clearInterval(COUNTER_GAME_FINISH)
         onClickPokemonList()
     }
 }
 
-//TODO 0.25秒に一回通るようにする
+/**
+ * 0.25秒に一回ポケモン画像を表示させる関数です
+ */
+
 function showRandomImages025s(){
-    //1.fetch時に、事前にpictureUrlのリストを作っておく
-    //2.idをランダムで生成する　約180匹
-    //ランダムで生成したidをpictureUrlのindexに指定して取り出す
-    //ランダムな場所に表示させる
-    //タイマーで良いタイミングで消す　それを繰り返す
-    //5.onClickでidを渡して他の変数に格納する
-    //6.結果が出たらWebStorageに保存する
-    //TODO 7.BoxボタンクリックでWebStorageに入っているidを再Fetchする
-    //TODo 8.fetch処理を書き換える　できれば全fetchで表示は200くらい
-    //TODo 最後の終了画面ではcounterで1秒ごとに動かして結果と遷移しますとmainloadとBox画面に自動遷移
-
-
     // div要素を作成
     const divPokemonRandomImage = document.createElement('div')
-    // pokemonクラスを追加 TODO add random_pokemon_box
-    divPokemonRandomImage.classList.add('random_pokemon_box')
+    const pokemonImageIndex = 2 * ((passSec * 4) -1);
+    const displayPokemonId = displayPokemonIds[pokemonImageIndex]
+    const displayPokemonImage = pokemonImages[displayPokemonId -1];
 
-    //TODO 1秒に３匹くらい表示 iが２だと同じものが表示されるので今が何秒かどうかの計算が必要(passSecを変えれば良い)
-    //TODO n=0... 2n 2n+1
-    for(let i = 0; i < 2; i++){
-        //TODo passSec = 0.5 countUpInterval = 0.25
-        pokemonImageIndex = 2 * ((passSec * 4) -1) + i;
-        const displayPokemonImage = pokemonImages[displayPokemonIds[pokemonImageIndex]];
+    //縦横軸用の乱数生成
+    const x = Math.floor(Math.random() * 94);
+    const y = Math.floor(Math.random() * 94);
 
-        //縦横軸用の乱数生成
-        const x = Math.floor(Math.random() * 94);
-        const y = Math.floor(Math.random() * 94);
-
-        //box要素にimgタグを追加（乱数を代入した変数をポジションに設定）1回しかクリックさせないためにdisabledを加えた
-        divPokemonRandomImage.innerHTML = '<img id="' + pokemonImageIndex + '" src="' + displayPokemonImage + '" onclick="onClickPokemon(pokemonImageIndex)" alt="" style="top:'+y+'%; left:'+x+'%;">'
-    }
-    //hidePokemonSpan分のindexが離れたものはhide状態にします
-    if(pokemonImageIndex >= hidePokemonSpan){
-        document.getElementById((pokemonImageIndex - hidePokemonSpan).toString()).style.display = "none"
-    }
-
+    //追加したdiv要素にimgタグを追加（乱数を代入した変数をポジションに設定)
+    divPokemonRandomImage.innerHTML = '<img id="' + displayPokemonId + '" src="' + displayPokemonImage + '" onclick="onClickPokemon(' + displayPokemonId + ')" alt="" style="top:'+y+'%; left:'+x+'%;">'
     gameField.appendChild(divPokemonRandomImage)
 }
+
+/**
+ * finish画面での捕まえたポケモンの情報をセットする関数
+ * １０匹ごとにポケモンを表示し１０匹超えたら次の行に表示する
+ * ０匹の時はテキストを変える　それ以外は捕まえたポケモンの数を表示する
+ */
+function finishGamePokemonImage() {
+    const result = clickedPokemonIds
+    if (result !== undefined) {
+        // div要素を作成
+        const divPokemonImage = document.createElement('div')
+        for (let i = 0; i < result.length; i++) {
+            //floorで切り捨てする　横10ずつ増やし１０超えたら縦に１０増やす
+            const multiple = Math.floor(i / 10) + 1
+            let x = 0
+            const y = multiple * 20
+            if(multiple < 2) {
+                x = 10 * (i % 10)
+            }else{
+                x = 10 * (i % 10) -10
+            }
+            divPokemonImage.innerHTML += '<img src="' + pokemonImages[result[i]-1] + '" alt="" style="top:' + y + '%; left:' + x + '%;">'
+        }
+        if(result.length !== 0){
+            gameFinishPokemonCountText.innerHTML = 'あなたはポケモンを'+ result.length + '匹捕まえました.<br><br>画像は以下の通りです'
+        }else{
+            gameFinishPokemonCountText.innerHTML = 'あなたはポケモンを捕まえれませんでした.'
+        }
+        imageFinishScoreContainer.appendChild(divPokemonImage)
+    }
+}
+
+getWebStorage().then(_ => {fetchPokemons().then(_ => {})})
+fetchAllPokemonImage().then(_ => {})

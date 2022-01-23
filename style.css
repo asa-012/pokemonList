@@ -47,6 +47,7 @@ li {
 /*game*/
 .scroll_area_game_start_screen{
     margin-top: 140px;
+    text-align: center;
 }
 
 .button_start_game {
@@ -62,7 +63,6 @@ li {
     transition    : .3s;         /* なめらか変化 */
     box-shadow    : 3px 3px 3px #666666;  /* 影の設定 */
     border        : 2px solid #66ff66;    /* 枠の指定 */
-    margin-left: 5%;
 }
 
 .button_start_game :hover {
@@ -72,7 +72,8 @@ li {
 }
 
 .description_game_detail {
-    margin-left: 5%;
+    text-align: center;
+    font-size: 30px;
 }
 
 .game_field {
@@ -84,22 +85,54 @@ li {
     background-color: lightgreen;
 }
 
+.image_finish_score {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
 .game_field img {
     position: absolute;
     width: 140px;
     height: 140px
 }
 
-.count_texts {
+.count_text {
     padding-top: 1em;
     padding-left: 1em;
-    font-size: 20px;
+    font-size: 30px;
+}
+
+.text_image_finish_score {
+    padding-top: 1em;
+    padding-left: 1em;
+    font-size: 40px;
+}
+
+.text_finish {
+    text-align: center;
+    font-size: 80px;
+}
+
+.text_finish_register {
+    text-align: center;
+    font-size: 40px;
 }
 
 .game_finish_field {
-    padding-top: 1em;
-    padding-left: 1em;
-    font-size: 80px;
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+.image_finish_score {
+    width: 100vh;
+    height: 50vh;
+    margin: 0 auto;
 }
 
 /*Pokemon*/
@@ -113,7 +146,11 @@ li {
     max-width: 1200px;
 }
 
-/*Pokemon*/
+.text_no_pokemon {
+    text-align: center;
+    font-size: 40px;
+}
+
 .poke-container-background {
     justify-content: center;
     margin: 0 auto;
