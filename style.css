@@ -68,7 +68,6 @@ li {
     transition    : .3s;         /* なめらか変化 */
     box-shadow    : 3px 3px 3px #666666;  /* 影の設定 */
     border        : 2px solid #66ff66;    /* 枠の指定 */
-    background-color: blue;
 }
 
 .button_start_game :hover {
