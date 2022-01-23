@@ -14,6 +14,7 @@ const gameFinishCompileText = document.getElementById("text_finish_compile")
 const gameFinishRegisterText = document.getElementById("text_finish_register")
 const gameFinishNavigationText = document.getElementById("text_finish_navigation")
 const imageFinishScoreContainer = document.getElementById("image_finish_score")
+const gameFinishPokemonCountText = document.getElementById("text_image_finish_score")
 
 
 const header = document.getElementById('header')
@@ -29,7 +30,6 @@ gameFinishCompileText.style.display = "none"
 gameFinishRegisterText.style.display = "none"
 gameFinishNavigationText.style.display = "none"
 imageFinishScoreContainer.style.display = "none"
-
 
 // 定数を定義 表示するポケモンidのMax数
 let pokemon_count = 720;
@@ -51,8 +51,6 @@ let COUNTER_GAME_MAIN = -1;
 const maxCountSecond = 10;
 const countUpInterval = 0.25;
 //TODO この値が６だとPCによっては落ちるので9くらいに上げると動くと思います
-
-// const hidePokemonSpan = 10;
 
 //gameが終わった後のFlow
 let COUNTER_GAME_FINISH = -1;
@@ -279,14 +277,14 @@ function finishGameFlow(){
         gameFinishField.style.display = "block"
         imageFinishScoreContainer.style.display = "block"
         //TODO 画像を貼る
-    }else if(finishGameFlowIntervalCount === 8){
+    }else if(finishGameFlowIntervalCount === 7){
         imageFinishScoreContainer.style.display = "none"
         gameFinishRegisterText.style.display = "block"
-    }else if(finishGameFlowIntervalCount === 10){
+    }else if(finishGameFlowIntervalCount === 8){
         gameFinishRegisterText.style.display = "none"
         gameFinishField.style.display = "none"
         mainLoading.style.display = "block"
-    }else if(finishGameFlowIntervalCount === 12){
+    }else if(finishGameFlowIntervalCount === 10){
         clearInterval(COUNTER_GAME_FINISH)
         onClickPokemonList()
     }
@@ -327,6 +325,12 @@ function finishGamePokemonImage() {
             }
             divPokemonImage.innerHTML += '<img src="' + pokemonImages[result[i]-1] + '" alt="" style="top:' + y + '%; left:' + x + '%;">'
         }
+        if(result.length !== 0){
+            gameFinishPokemonCountText.innerHTML = 'あなたはポケモンを'+ result.length + '匹捕まえました.<br><br>画像は以下の通りです'
+        }else{
+            gameFinishPokemonCountText.innerHTML = 'あなたはポケモンを捕まえれませんでした.'
+        }
+
         imageFinishScoreContainer.appendChild(divPokemonImage)
         console.log(imageFinishScoreContainer)
     }
