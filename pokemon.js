@@ -343,11 +343,10 @@ function showCount() {
             let result;
             if (clickedPokemonIdsOnStorage != null) {
                 //順番を新しい順にするため
-                result = clickedPokemonIdsOnStorage.reverse().concat(clickedPokemonIds.reverse())
+                result = clickedPokemonIdsOnStorage.reverse().concat(clickedPokemonIds)
                 result.reverse()
                 //元に戻しておく
                 clickedPokemonIdsOnStorage.reverse()
-                clickedPokemonIds.reverse()
             } else {
                 result = clickedPokemonIds
             }
@@ -418,7 +417,8 @@ function showRandomImages025s(){
  * ０匹の時はテキストを変える　それ以外は捕まえたポケモンの数を表示する
  */
 function finishGamePokemonImage() {
-    const result = clickedPokemonIds
+    const result = clickedPokemonIds.reverse()
+    clickedPokemonIds.reverse()
     if (result !== undefined) {
         // div要素を作成
         const divPokemonImage = document.createElement('div')
