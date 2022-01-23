@@ -132,43 +132,42 @@ const getPokemonAllImage = async (id) => {
 
 const getPokemon = async (id, isShow) => {
     if(id !== undefined) {
-        const url = `https://pokeapi.co/api/v2/pokemon/${id}`
+        const url = `https://pokeapi.co/api/v2/pokemon-species/${id}`
         const res = await fetch(url)
         const data = await res.json()
-        createPokemonCard(data, isShow)
+        createPokemonCard(data, id ,isShow)
     }
 }
 
 /**
  * ポケモンのカードを作成します
- * @param pokemon
+ * @param pokemonJson
+ * @param id
  * @param isShow
  */
-const createPokemonCard = (pokemon, isShow) => {
+const createPokemonCard = (pokemonJson, id ,isShow) => {
     // div要素を作成
     const pokemonEl = document.createElement('div')
     // pokemonクラスを追加
-    pokemonEl.classList.add('pokemon')
-
+    pokemonEl.classList.add('pokemonJson')
+    console.log(pokemonJson)
     // ポケモン情報からデータを格納
-    const name = pokemon.name[0].toUpperCase() + pokemon.name.slice(1)
-    const id = pokemon.id.toString().padStart(3, '0')
-    const poke_types = pokemon.types.map(type => type.type.name)
-    const type = main_types.find(type => poke_types.indexOf(type) > -1)
-    const image = pokemon.sprites['front_default']
+    const name = pokemonJson.names[0].name
+    // const poke_types = pokemon.types.map(type => type.type.name)
+    // const type = main_types.find(type => poke_types.indexOf(type) > -1)
+    // const image = pokemonJson.sprites['front_default']
     // ポケモンの背景色を設定
-    pokemonEl.style.backgroundColor = colors[type]
+    //TODO pokemonEl.style.backgroundColor = colors[type]
 
-    // ポケモンカードのテンプレ
-    // ポケモンカードのテンプレートを追加
+    //TODO        <img src=${image} alt=""> img-containerのdivの間に
+    //TODo spanの間に${type}
     pokemonEl.innerHTML = `
     <div class="img-container">
-        <img src=${image} alt="">
     </div>
     <div class="info">
         <span class="number">#${id}</span>
         <h3 class="name">${name}</h3>
-        <small class="type">Type: <span>${type}</span> </small>
+        <small class="type">Type: <span></span> </small>
     </div>
     `
 
