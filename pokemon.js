@@ -41,7 +41,6 @@ let isPokemonListScreen = true
 let pokemonImages = []
 const maxDisplayPokemonGameCount = 80
 let displayPokemonIds = []
-let pokemonImageIndex = 0
 let clickedPokemonIds = []
 const KEY_CLICKED_POKEMON = "key_clicked_pokemon"
 let clickedPokemonIdsOnStorage = []
@@ -230,8 +229,13 @@ function onClickGameStart() {
 }
 
 function onClickPokemon(id){
-    clickedPokemonIds.push(id)
-    document.getElementById(id).style.display = "none"
+    if(id != null) {
+        //TODO ずれの解消 -21くらいで
+        clickedPokemonIds.push(id)
+        document.getElementById(id).style.display = "none"
+        console.log(clickedPokemonIds)
+        console.log(pokemonImages[id])
+    }
 }
 
 // 繰り返し処理の開始
@@ -251,7 +255,6 @@ function showCount() {
             gameFinishField.style.display = "block"
             //concatで配列の結合が可能 TODO jsonを配列にする処理 clickedPokemonIdsOnStorageは初回取得時にnullの可能性があるので考慮が必要
             let result = []
-            console.log(clickedPokemonIds)
             if (clickedPokemonIdsOnStorage != null) {
                 result = clickedPokemonIdsOnStorage.concat(clickedPokemonIds)
             } else {
@@ -294,6 +297,7 @@ function finishGameFlow(){
 
 //TODO 0.25秒に一回通るようにする
 function showRandomImages025s(){
+    let pokemonImageIndexGlobal = 0
     //1.fetch時に、事前にpictureUrlのリストを作っておく
     //2.idをランダムで生成する　約180匹
     //ランダムで生成したidをpictureUrlのindexに指定して取り出す
@@ -315,8 +319,9 @@ function showRandomImages025s(){
     //TODO n=0... 2n 2n+1
     for(let i = 0; i < 2; i++){
         //TODo passSec = 0.5 countUpInterval = 0.25
-        pokemonImageIndex = 2 * ((passSec * 4) -1) + i;
-        const displayPokemonId = displayPokemonIds[pokemonImageIndex]
+        const pokemonImageIndex = 2 * ((passSec * 4) -1) + i;
+        pokemonImageIndexGlobal = pokemonImageIndex
+        const displayPokemonId = displayPokemonIds[pokemonImageIndex]+1
         const displayPokemonImage = pokemonImages[displayPokemonId];
 
         //縦横軸用の乱数生成
@@ -324,12 +329,12 @@ function showRandomImages025s(){
         const y = Math.floor(Math.random() * 94);
 
         //box要素にimgタグを追加（乱数を代入した変数をポジションに設定）1回しかクリックさせないためにdisabledを加えた
-        divPokemonRandomImage.innerHTML = '<img id="' + displayPokemonId + '" src="' + displayPokemonImage + '" onclick="onClickPokemon(pokemonImageIndex)" alt="" style="top:'+y+'%; left:'+x+'%;">'
+        divPokemonRandomImage.innerHTML = '<img id="' + displayPokemonId + '" src="' + displayPokemonImage + '" onclick="onClickPokemon(' + displayPokemonId + ')" alt="" style="top:'+y+'%; left:'+x+'%;">'
     }
     //hidePokemonSpan分のindexが離れたものはhide状態にします
-    if(pokemonImageIndex >= hidePokemonSpan){
-        document.getElementById(displayPokemonIds[pokemonImageIndex - hidePokemonSpan]).style.display = "none"
-    }
+    // if(pokemonImageIndexGlobal >= hidePokemonSpan){
+    //     document.getElementById(displayPokemonIds[pokemonImageIndexGlobal - hidePokemonSpan]).style.display = "none"
+    // }
 
     gameField.appendChild(divPokemonRandomImage)
 }
