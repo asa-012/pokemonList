@@ -294,42 +294,19 @@ function finishGameFlow(){
 
 //TODO 0.25秒に一回通るようにする
 function showRandomImages025s(){
-    let pokemonImageIndexGlobal = 0
-    //1.fetch時に、事前にpictureUrlのリストを作っておく
-    //2.idをランダムで生成する　約180匹
-    //ランダムで生成したidをpictureUrlのindexに指定して取り出す
-    //ランダムな場所に表示させる
-    //タイマーで良いタイミングで消す　それを繰り返す
-    //5.onClickでidを渡して他の変数に格納する
-    //6.結果が出たらWebStorageに保存する
-    //TODO 7.BoxボタンクリックでWebStorageに入っているidを再Fetchする
-    //TODo 8.fetch処理を書き換える　できれば全fetchで表示は200くらい
-    //TODo 最後の終了画面ではcounterで1秒ごとに動かして結果と遷移しますとmainloadとBox画面に自動遷移
-
-
     // div要素を作成
     const divPokemonRandomImage = document.createElement('div')
     //TODO 1秒に３匹くらい表示 iが２だと同じものが表示されるので今が何秒かどうかの計算が必要(passSecを変えれば良い)
-    //TODO n=0... 2n 2n+1
-    for(let i = 0; i < 2; i++){
-        //TODo passSec = 0.5 countUpInterval = 0.25
-        const pokemonImageIndex = 2 * ((passSec * 4) -1) + i;
-        pokemonImageIndexGlobal = pokemonImageIndex
-        const displayPokemonId = displayPokemonIds[pokemonImageIndex]
-        const displayPokemonImage = pokemonImages[displayPokemonId -1];
+    const pokemonImageIndex = 2 * ((passSec * 4) -1);
+    const displayPokemonId = displayPokemonIds[pokemonImageIndex]
+    const displayPokemonImage = pokemonImages[displayPokemonId -1];
 
-        //縦横軸用の乱数生成
-        const x = Math.floor(Math.random() * 94);
-        const y = Math.floor(Math.random() * 94);
+    //縦横軸用の乱数生成
+    const x = Math.floor(Math.random() * 94);
+    const y = Math.floor(Math.random() * 94);
 
-        //box要素にimgタグを追加（乱数を代入した変数をポジションに設定）1回しかクリックさせないためにdisabledを加えた
-        divPokemonRandomImage.innerHTML = '<img id="' + displayPokemonId + '" src="' + displayPokemonImage + '" onclick="onClickPokemon(' + displayPokemonId + ')" alt="" style="top:'+y+'%; left:'+x+'%;">'
-    }
-    //hidePokemonSpan分のindexが離れたものはhide状態にします
-    // if(pokemonImageIndexGlobal >= hidePokemonSpan){
-    //     document.getElementById(displayPokemonIds[pokemonImageIndexGlobal - hidePokemonSpan]).style.display = "none"
-    // }
-
+    //box要素にimgタグを追加（乱数を代入した変数をポジションに設定
+    divPokemonRandomImage.innerHTML = '<img id="' + displayPokemonId + '" src="' + displayPokemonImage + '" onclick="onClickPokemon(' + displayPokemonId + ')" alt="" style="top:'+y+'%; left:'+x+'%;">'
     gameField.appendChild(divPokemonRandomImage)
 }
 
@@ -346,6 +323,7 @@ function finishGamePokemonImage() {
 
             divPokemonImage.innerHTML = '<img src="' + pokemonImages[result[i]-1] + '" alt="" style="top:' + y + '%; left:' + x + '%;">'
             imageFinishScoreContainer.appendChild(divPokemonImage)
+            console.log(imageFinishScoreContainer)
         }
     }
 }
