@@ -30,7 +30,9 @@
 </div>
 
 <div class="scroll_area_pokemon_list" id="scroll_area_pokemon_list">
-<div class="poke-container" id="poke-container"></div>
+<div class="poke-container" id="poke-container">
+    <p id="text_no_pokemon" class="text_no_pokemon"></p>
+</div>
     <div class="sk-chase2" id="loading_again">
         <div class="sk-chase-dot"></div>
         <div class="sk-chase-dot"></div>
@@ -43,20 +45,20 @@
 </div>
 
 <div class="scroll_area_game_start_screen" id="scroll_area_game_start_screen">
-    <p class="description_game_detail" id="description_game_detail">ポケモンを捕まえましょう！ポケモンの種類は指定できます.<br>ポケモン情報の表示は英語なので英語の勉強にもなるかもしれません。</p>
+    <p class="description_game_detail" id="description_game_detail">ポケモンを捕まえましょう！<br>ポケモン情報の表示は英語ですが頑張って読んでください!<br><br>**遊び方**<br>1.ポケモンがたくさん出てきます.<br>2.クリックすると捕まえることができます.</p>
     <input type="button" value="ゲームスタート" onclick="onClickGameStart()" class="button_start_game" id="button_start_game">
 </div>
 
-<div class="game_field" id="game_field">
-    <p id="count_text" class="count_texts">残り時間：10秒</p>
+<div id="game_field" class="game_field">
+    <p id="count_text" class="count_text">残り時間：10秒</p>
 </div>
 
-<div class="game_finish_field" id="game_finish_field">
-    <p id="text_finish" class="text_finish">終了！！</p>
-    <p id="text_finish_compile" class="text_finish">集計中です....</p>
-    <p id="text_finish_score" class="text_finish">あなたのスコアはこれです.</p>
-    <p id="text_finish_register" class="text_finish">結果をBoxに登録しました.</p>
-    <p id="text_finish_navigation" class="text_finish">登録完了したのでBox画面に遷移します.</p>
+<div id="game_finish_field" class="game_finish_field" >
+    <p id="text_finish" class="text_finish">終了！！<br>お疲れ様でした！</p>
+    <div id="image_finish_score" class="image_finish_score">
+        <p id="text_image_finish_score" class="text_image_finish_score"></p>
+    </div>
+    <p id="text_finish_register" class="text_finish_register">結果をBoxに登録しました!<br>Box画面に遷移します!</p>
 </div>
 
 <script src="pokemon.js"></script>
