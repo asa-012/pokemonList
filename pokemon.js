@@ -231,9 +231,6 @@ function onClickPokemon(id){
         //TODO ずれの解消 -21くらいで
         clickedPokemonIds.push(id)
         document.getElementById(id).style.display = "none"
-        console.log(pokemonImages)
-        // console.log(clickedPokemonIds)
-        // console.log(pokemonImages[id])
     }
 }
 
@@ -320,8 +317,8 @@ function showRandomImages025s(){
         //TODo passSec = 0.5 countUpInterval = 0.25
         const pokemonImageIndex = 2 * ((passSec * 4) -1) + i;
         pokemonImageIndexGlobal = pokemonImageIndex
-        const displayPokemonId = displayPokemonIds[pokemonImageIndex]+1
-        const displayPokemonImage = pokemonImages[displayPokemonId];
+        const displayPokemonId = displayPokemonIds[pokemonImageIndex]
+        const displayPokemonImage = pokemonImages[displayPokemonId -1];
 
         //縦横軸用の乱数生成
         const x = Math.floor(Math.random() * 94);
