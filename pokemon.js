@@ -317,14 +317,18 @@ function finishGamePokemonImage() {
         const divPokemonImage = document.createElement('div')
         for (let i = 0; i < result.length; i++) {
             //floorで切り捨てする　横10ずつ増やし１０超えたら縦に１０増やす
-            const multiple = Math.floor((i + 1) / 10) + 1
-            const x = 10 * ((i + 1) % 10)
-            const y = multiple * 10
-
-            divPokemonImage.innerHTML = '<img src="' + pokemonImages[result[i]-1] + '" alt="" style="top:' + y + '%; left:' + x + '%;">'
-            imageFinishScoreContainer.appendChild(divPokemonImage)
-            console.log(imageFinishScoreContainer)
+            const multiple = Math.floor(i / 10) + 1
+            let x = 0
+            const y = multiple * 12
+            if(multiple < 2) {
+                x = 10 * (i % 10)
+            }else{
+                x = 10 * (i % 10) -10
+            }
+            divPokemonImage.innerHTML += '<img src="' + pokemonImages[result[i]-1] + '" alt="" style="top:' + y + '%; left:' + x + '%;">'
         }
+        imageFinishScoreContainer.appendChild(divPokemonImage)
+        console.log(imageFinishScoreContainer)
     }
 }
 
