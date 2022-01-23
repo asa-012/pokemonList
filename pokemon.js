@@ -31,15 +31,15 @@ gameFinishRegisterText.style.display = "none"
 gameFinishNavigationText.style.display = "none"
 
 
-// 定数を定義 表示するポケモン数
-let pokemon_count = 250;
+// 定数を定義 表示するポケモンidのMax数
+let pokemon_count = 720;
 let pokemon_max_loading_count = 20;
 let arrivedBottomPoint = false;
 let isPokemonListScreen = true
 
 //imageの全配列
 let pokemonImages = []
-const maxDisplayPokemonGameCount = 90
+const maxDisplayPokemonGameCount = 80
 let displayPokemonIds = []
 let pokemonImageIndex = 0
 let clickedPokemonIds = []
@@ -49,10 +49,10 @@ let clickedPokemonIdsOnStorage = []
 // 秒数カウント用変数
 let passSec = 0;
 let COUNTER_GAME_MAIN = -1;
-const maxCountSecond = 12;
+const maxCountSecond = 10;
 const countUpInterval = 0.25;
 //TODO この値が６だとPCによっては落ちるので9くらいに上げると動くと思います
-const hidePokemonSpan = 6;
+const hidePokemonSpan = 10;
 
 //gameが終わった後のFlow
 let COUNTER_GAME_FINISH = -1;
@@ -79,19 +79,9 @@ const colors = {
 // colorsのkeyを配列に格納
 const main_types = Object.keys(colors)
 
-const fetchAllPokemon = async () => {
+const fetchAllPokemonImage = async () => {
     for (let i = 1; i <= pokemon_count; i++) {
-        if (i <= pokemon_max_loading_count) {
-            await getPokemon(i, true)
-            if (i === pokemon_max_loading_count) {
-                scrollToBottom()
-            }
-        } else {
-            mainLoading.remove()
-            pokeContainer.style.display = "block"
-            reLoading.style.display = "block"
-            await getPokemon(i, false)
-        }
+            await getPokemonAllImage(i)
     }
 }
 
@@ -133,6 +123,15 @@ const getPokemon = async (id, isShow) => {
         const data = await res.json()
         createPokemonCard(data, isShow)
         //imageをゲームで使うのでurl.pngを全て格納する
+        pokemonImages.push(data.sprites['front_default'])
+    }
+}
+
+const getPokemonAllImage = async (id) => {
+    if(id !== undefined) {
+        const url = `https://pokeapi.co/api/v2/pokemon/${id}`
+        const res = await fetch(url)
+        const data = await res.json()
         pokemonImages.push(data.sprites['front_default'])
     }
 }
@@ -197,16 +196,9 @@ function scrollToBottom() {
         }
     });
 }
-getWebStorage().then(_ => {fetchPokemons().then(_ => {})})
 
 function onClickPokemonList() {
-    //TODO この条件は全てのクリック箇所で実装すること reFetch処理を加える
-    fetchPokemons().then(_ => {})
-    header.style.visibility = 'visible'
-    isPokemonListScreen = true
-    scrollAreaPokemonList.style.display = "block"
-    scrollAreaGameStart.style.display = "none"
-    gameField.style.display = 'none'
+    window.location.reload();
 }
 
 function onClickGame() {
@@ -235,10 +227,11 @@ function onClickGameStart() {
     console.log(localStorage.getItem(KEY_CLICKED_POKEMON))
 
     for (let i = 0;i<maxDisplayPokemonGameCount ;i++){
-        //TODO ポケモンは被っても良いとする 今はとりあえず100匹ぶんなので変更する
-        const id = Math.floor(Math.random() * 100);
+        //ポケモンは被っても良いとする
+        const id = Math.floor(Math.random() * pokemon_count);
         displayPokemonIds.push(id)
     }
+    console.log(displayPokemonIds)
 
     startShowing()
 }
@@ -347,3 +340,6 @@ function showRandomImages025s(){
 
     gameField.appendChild(divPokemonRandomImage)
 }
+
+getWebStorage().then(_ => {fetchPokemons().then(_ => {})})
+fetchAllPokemonImage().then(_ => {})
