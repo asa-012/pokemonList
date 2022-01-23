@@ -185,21 +185,28 @@ const createPokemonCard = (id , name , image , type , species, description, isSh
     // div要素を作成
     const pokemonEl = document.createElement('div')
     // pokemonクラスを追加
-    pokemonEl.classList.add('pokemonJson')
+    pokemonEl.classList.add('pokemon')
     // ポケモンの背景色を設定
     pokemonEl.style.backgroundColor = colors[type]
+
+    const description1Line = description.slice(0, 21)
+    const add = '<br>'
+    const description2Line = description.slice(12)
+    const descriptionResult = description1Line + add + description2Line
 
     //TODO        <img src=${image} alt=""> img-containerのdivの間に
     //TODo spanの間に${type}
     pokemonEl.innerHTML = `
-    <div class="img-container"><img src=${image} alt=""></div>
+    <div class="img-container">
+        <img src=${image} alt="">
+        </div>
     <div class="info">
         <span class="number">#${id}</span>
         <h3 class="name">${name}</h3>
         <small class="type">${species}</small>
         <br>
         <small class="type">Type: <span>${type}</span> </small>
-        <p>${description}</p>
+        <p class="description">${descriptionResult}</p>
     </div>
     `
 

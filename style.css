@@ -195,6 +195,10 @@ li {
     letter-spacing: 1px;
 }
 
+.description {
+    text-align: center;
+}
+
 /*loading*/
 .sk-chase1 {
     width: 40px;
