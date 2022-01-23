@@ -182,6 +182,7 @@ fetchPokemons().then(_ => {})
 
 function onClickPokemonList() {
     //TODO この条件は全てのクリック箇所で実装すること reFetch処理を加える
+    fetchPokemons().then(_ => {})
     header.style.visibility = 'visible'
     isPokemonListScreen = true
     scrollAreaPokemonList.style.display = "block"
