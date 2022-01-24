@@ -31,6 +31,13 @@ a {
     text-decoration: none;
     color: #4b4b4b;
 }
+.button_pokemon_list {
+    font-size: 20px;
+    margin-right: 20px;
+}
+.button_game {
+    font-size: 20px;
+}
 nav {
     margin: 0 0 0 auto;
 }
