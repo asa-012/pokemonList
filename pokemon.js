@@ -215,8 +215,6 @@ const createPokemonCard = (id , name , image , type ,typeKey , species, descript
     const description2Line = description.slice(21)
     const descriptionResult = description1Line + add + description2Line
 
-    //TODO        <img src=${image} alt=""> img-containerのdivの間に
-    //TODo spanの間に${type}
     pokemonEl.innerHTML = `
     <div class="img-container">
         <img src=${image} alt="">
