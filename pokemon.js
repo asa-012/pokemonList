@@ -210,13 +210,12 @@ const createPokemonCard = (id , name , image , type ,typeKey , species, descript
     // ポケモンの背景色を設定
     pokemonEl.style.backgroundColor = colors[typeKey]
 
+    //取得した文字列を２行にするために文字列を２つに分け<br>を入れて改行している
     const description1Line = description.slice(0, 21)
     const add = '<br>'
     const description2Line = description.slice(21)
     const descriptionResult = description1Line + add + description2Line
 
-    //TODO        <img src=${image} alt=""> img-containerのdivの間に
-    //TODo spanの間に${type}
     pokemonEl.innerHTML = `
     <div class="img-container">
         <img src=${image} alt="">
