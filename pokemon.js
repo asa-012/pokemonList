@@ -20,6 +20,7 @@ const modal = document.getElementById('easyModal');
 const modalContent = document.getElementById('modal_content')
 const buttonClose = document.getElementsByClassName('modalClose')[0];
 const modalImage = document.getElementById('modal_image');
+const modalImageBack = document.getElementById('modal_image_back')
 const modalId = document.getElementById('modal_id');
 const modalName = document.getElementById('modal_name');
 const modalType = document.getElementById('modal_type');
@@ -128,11 +129,22 @@ function outsideClose(e) {
 }
 
 /**
- * modalを出現させます
+ * modalを表示します
+ * @param id
+ * @param name
+ * @param image
+ * @param imageBack
+ * @param type
+ * @param typeKey
+ * @param species
+ * @param description
  */
-function togglePokemonDetailModal(id,name,image,type,typeKey,species,description){
+function togglePokemonDetailModal(id,name,image,imageBack,type,typeKey,species,description){
     modalName.innerHTML = name
-    modalImage.innerHTML = `<img src=${image} alt="">`
+    modalImage.innerHTML = `
+<img src=${image} alt="">
+<img src=${imageBack} alt="">
+`
     modalId.innerHTML = "#" + id
     modalType.innerHTML = type
     modalSpecies.innerHTML = species
@@ -213,6 +225,7 @@ const getPokemon = async (id, isShow) => {
         const name = dataName.names[0].name
         const typeEN = main_types.find(type => dataTypeAndImage.types.map(type => type.type.name).indexOf(type) > -1)
         const typeJP = typeEnToJp[typeEN]
+        const imageBack = dataTypeAndImage.sprites['back_default']
         const image = dataTypeAndImage.sprites['front_default']
         const species = dataName.genera[0].genus
         let description = ''
@@ -234,7 +247,7 @@ const getPokemon = async (id, isShow) => {
         const add = '<br>'
         const description2Line = descriptionNoSpace.slice(15)
         const descriptionResult = description1Line + add + description2Line
-            createPokemonCard(id, name, image, typeJP, typeEN ,species, descriptionResult, isShow)
+            createPokemonCard(id, name, image, imageBack, typeJP, typeEN ,species, descriptionResult, isShow)
     }
 }
 
@@ -243,19 +256,20 @@ const getPokemon = async (id, isShow) => {
  * @param id
  * @param name
  * @param image
+ * @param imageBack
  * @param type
  * @param typeKey
  * @param species
  * @param description
  * @param isShow
  */
-const createPokemonCard = (id , name , image , type ,typeKey , species, description, isShow) => {
+const createPokemonCard = (id , name , image , imageBack , type ,typeKey , species, description, isShow) => {
     // div要素を作成
     const pokemonEl = document.createElement('div')
     // pokemonクラスを追加
     pokemonEl.classList.add('pokemon')
     pokemonEl.addEventListener('click', () => {
-        togglePokemonDetailModal(id,name,image,type,typeKey,species,description)
+        togglePokemonDetailModal(id,name,image,imageBack,type,typeKey,species,description)
     });
     // ポケモンの背景色を設定
     pokemonEl.style.backgroundColor = colors[typeKey]
