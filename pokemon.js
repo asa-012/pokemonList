@@ -124,7 +124,7 @@ function outsideClose(e) {
 /**
  * modalを出現させます
  */
-function toggleModal(id,name,image){
+function togglePokemonDetailModal(id,name,image,type,typeKey,species,description){
     modalName.innerText = name
     modalImage.innerHTML = `<img src=${image} alt="">`
     modal.style.display = 'block';
@@ -216,6 +216,11 @@ const getPokemon = async (id, isShow) => {
                 }
             }
         }
+        //取得した文字列を２行にするために文字列を２つに分け<br>を入れて改行している
+        const description1Line = description.slice(0, 21)
+        const add = '<br>'
+        const description2Line = description.slice(21)
+        const descriptionResult = description1Line + add + description2Line
             createPokemonCard(id, name, image, typeJP, typeEN ,species, description, isShow)
     }
 }
@@ -237,19 +242,23 @@ const createPokemonCard = (id , name , image , type ,typeKey , species, descript
     // pokemonクラスを追加
     pokemonEl.classList.add('pokemon')
     pokemonEl.addEventListener('click', () => {
-        toggleModal(id,name,image)
+        togglePokemonDetailModal(id,name,image,type,typeKey,species,description)
     });
     // ポケモンの背景色を設定
     pokemonEl.style.backgroundColor = colors[typeKey]
 
-    //取得した文字列を２行にするために文字列を２つに分け<br>を入れて改行している
-    const description1Line = description.slice(0, 21)
-    const add = '<br>'
-    const description2Line = description.slice(21)
-    const descriptionResult = description1Line + add + description2Line
-
     pokemonEl.innerHTML = `
     <div class="img-container">
+        <img src=${image} alt="">
+        </div>
+    <div class="info">
+        <h3 class="name">${name}</h3>
+        <small class="type"><span>${type}</span>タイプ</small>
+    </div>
+    `
+
+    /*
+    *     <div class="img-container">
         <img src=${image} alt="">
         </div>
     <div class="info">
@@ -259,8 +268,7 @@ const createPokemonCard = (id , name , image , type ,typeKey , species, descript
         <br>
         <small class="type">${species}</small>
         <p class="description">${descriptionResult}</p>
-    </div>
-    `
+    </div>*/
 
     if (isShow) {
         // poke_containerの子要素として追加
