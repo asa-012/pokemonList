@@ -133,12 +133,12 @@ function outsideClose(e) {
  * @param name
  * @param image
  * @param imageBack
- * @param type
- * @param typeKey
+ * @param typeList
+ * @param typeKeyList
  * @param species
  * @param description
  */
-function togglePokemonDetailModal(id,name,image,imageBack,type,typeKey,species,description){
+function togglePokemonDetailModal(id,name,image,imageBack,typeList,typeKeyList,species,description){
     modalName.innerHTML = name
     if(imageBack !== null) {
         modalImage.innerHTML = `<img src=${image} alt=""><img src=${imageBack} alt="">`
@@ -146,10 +146,18 @@ function togglePokemonDetailModal(id,name,image,imageBack,type,typeKey,species,d
         modalImage.innerHTML = `<img src=${image} alt="">`
     }
     modalId.innerHTML = "#" + id
-    modalType.innerHTML = type
+    let allType = ""
+    for (let i=0;i<typeList.length;i++){
+        if(i === 0) {
+            allType = typeList[i]
+        }else{
+            allType += "・" + typeList[i]
+        }
+    }
+    modalType.innerHTML = allType
     modalSpecies.innerHTML = species
     modalDescription.innerHTML = description
-    modalContent.style.backgroundColor = colors[typeKey]
+    modalContent.style.backgroundColor = colors[typeKeyList[0]]
 
     window.setTimeout(()=>{
         modal.style.display = 'block';
@@ -224,9 +232,14 @@ const getPokemon = async (id, isShow) => {
         const resTypeAndImage = await fetch(urlTypeAndImage)
         const dataTypeAndImage = await resTypeAndImage.json()
 
+        let typeENList = []
+        let typeJPList = []
         const name = dataName.names[0].name
-        const typeEN = main_types.find(type => dataTypeAndImage.types.map(type => type.type.name).indexOf(type) > -1)
-        const typeJP = typeEnToJp[typeEN]
+        for(let i=0;i<dataTypeAndImage.types.length;i++){
+            const typeName = dataTypeAndImage.types[i].type['name']
+            typeENList.push(typeName)
+            typeJPList.push(typeEnToJp[typeName])
+        }
         const imageBack = dataTypeAndImage.sprites['back_default']
         const image = dataTypeAndImage.sprites['front_default']
         const species = dataName.genera[0].genus
@@ -249,7 +262,7 @@ const getPokemon = async (id, isShow) => {
         const add = '<br>'
         const description2Line = descriptionNoSpace.slice(15)
         const descriptionResult = description1Line + add + description2Line
-            createPokemonCard(id, name, image, imageBack, typeJP, typeEN ,species, descriptionResult, isShow)
+            createPokemonCard(id, name, image, imageBack, typeJPList, typeENList ,species, descriptionResult, isShow)
     }
 }
 
@@ -259,22 +272,22 @@ const getPokemon = async (id, isShow) => {
  * @param name
  * @param image
  * @param imageBack
- * @param type
- * @param typeKey
+ * @param typeList
+ * @param typeENKeyList
  * @param species
  * @param description
  * @param isShow
  */
-const createPokemonCard = (id , name , image , imageBack , type ,typeKey , species, description, isShow) => {
+const createPokemonCard = (id , name , image , imageBack , typeList ,typeENKeyList , species, description, isShow) => {
     // div要素を作成
     const pokemonEl = document.createElement('div')
     // pokemonクラスを追加
     pokemonEl.classList.add('pokemon')
     pokemonEl.addEventListener('click', () => {
-        togglePokemonDetailModal(id,name,image,imageBack,type,typeKey,species,description)
+        togglePokemonDetailModal(id,name,image,imageBack,typeList,typeENKeyList,species,description)
     });
     // ポケモンの背景色を設定
-    pokemonEl.style.backgroundColor = colors[typeKey]
+    pokemonEl.style.backgroundColor = colors[typeENKeyList[0]]
 
     pokemonEl.innerHTML = `
     <div class="img-container">
@@ -282,7 +295,7 @@ const createPokemonCard = (id , name , image , imageBack , type ,typeKey , speci
         </div>
     <div class="info">
         <h3 class="name">${name}</h3>
-        <small class="type"><span>${type}</span>タイプ</small>
+        <small class="type"><span>${typeList[0]}</span>タイプ</small>
     </div>
     `
 
@@ -293,9 +306,9 @@ const createPokemonCard = (id , name , image , imageBack , type ,typeKey , speci
     <div class="info">
         <span class="number">#${id}</span>
         <h3 class="name">${name}</h3>
-        <small class="type"><span>${type}</span>タイプ</small>
+        <small class="typeList"><span>${typeList}</span>タイプ</small>
         <br>
-        <small class="type">${species}</small>
+        <small class="typeList">${species}</small>
         <p class="description">${descriptionResult}</p>
     </div>*/
 
