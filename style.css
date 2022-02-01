@@ -330,3 +330,9 @@ li {
     padding: 10px 20px;
     color: black;
 }
+
+.modal_name {
+    font-size: 20px;
+    margin-left: 20px;
+    text-align: center;
+}
