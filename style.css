@@ -219,6 +219,10 @@ li {
     font-size: 0.8em;
 }
 
+.center {
+    text-align: center;
+}
+
 .pokemon .info .name {
     margin: 15px 0 7px;
     letter-spacing: 1px;
@@ -302,8 +306,6 @@ li {
     display: none;
     position: fixed;
     z-index: 1;
-    left: 0;
-    top: 0;
     height: 100%;
     width: 100%;
     overflow: auto;
@@ -335,17 +337,16 @@ li {
 
 .modal-body {
     color: black;
-
 }
 
 .modal_name {
     font-size: 20px;
     text-align: center;
-    margin-top: -8px;
 }
 
 .modal_image {
     text-align: center;
+    padding-left: 20px;
 }
 
 .modal_padding {
