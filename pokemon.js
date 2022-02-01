@@ -20,7 +20,6 @@ const modal = document.getElementById('easyModal');
 const modalContent = document.getElementById('modal_content')
 const buttonClose = document.getElementsByClassName('modalClose')[0];
 const modalImage = document.getElementById('modal_image');
-const modalImageBack = document.getElementById('modal_image_back')
 const modalId = document.getElementById('modal_id');
 const modalName = document.getElementById('modal_name');
 const modalType = document.getElementById('modal_type');
