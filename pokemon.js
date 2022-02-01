@@ -19,7 +19,12 @@ const gameFinishPokemonCountText = document.getElementById("text_image_finish_sc
 const modal = document.getElementById('easyModal');
 const buttonClose = document.getElementsByClassName('modalClose')[0];
 const modalImage = document.getElementById('modal_image');
+const modalId = document.getElementById('modal_id');
 const modalName = document.getElementById('modal_name');
+const modalType = document.getElementById('modal_type');
+const modalSpecies = document.getElementById('modal_species');
+const modalDescription = document.getElementById('modal_description');
+
 
 const header = document.getElementById('header')
 

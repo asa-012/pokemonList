@@ -56,9 +56,18 @@ li {
     font-size: 40px;
 }
 
-.type {
+.modal_type {
     margin-top: 4px;
     margin-bottom: 4px;
+    text-align: center;
+    font-size: 12px;
+}
+
+.modal_species {
+    margin-top: 4px;
+    margin-bottom: 4px;
+    text-align: center;
+    font-size: 12px;
 }
 
 /*game*/
@@ -203,6 +212,13 @@ li {
     font-size: 0.8em;
 }
 
+.modal_id {
+    background-color: rgba(0, 0, 0, 0.1);
+    padding: 5px 10px;
+    border-radius: 10px;
+    font-size: 0.8em;
+}
+
 .pokemon .info .name {
     margin: 15px 0 7px;
     letter-spacing: 1px;
@@ -319,6 +335,7 @@ li {
 
 .modal-body {
     color: black;
+
 }
 
 .modal_name {
