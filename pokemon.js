@@ -20,6 +20,7 @@ const modal = document.getElementById('easyModal');
 const buttonClose = document.getElementsByClassName('modalClose')[0];
 const modalImage = document.getElementById('modal_image');
 const modalName = document.getElementById('modal_name');
+const modalButton = document.getElementById('modal_button');
 
 const header = document.getElementById('header')
 
@@ -124,10 +125,21 @@ function outsideClose(e) {
 /**
  * modalを出現させます
  */
-function toggleModal(name,image){
+function toggleModal(id,name,image){
     modalName.innerText = name
     modalImage.innerHTML = `<img src=${image} alt="">`
+    modalButton.addEventListener('click',() => {
+        onClickSeeYouPokemon(id)
+    })
     modal.style.display = 'block';
+}
+
+/**
+ * ポケモンを逃がします
+ * @param id
+ */
+function onClickSeeYouPokemon(id){
+    //TODO 指定されたidだけを消す処理
 }
 
 /**
@@ -237,7 +249,7 @@ const createPokemonCard = (id , name , image , type ,typeKey , species, descript
     // pokemonクラスを追加
     pokemonEl.classList.add('pokemon')
     pokemonEl.addEventListener('click', () => {
-        toggleModal(name,image)
+        toggleModal(id,name,image)
     });
     // ポケモンの背景色を設定
     pokemonEl.style.backgroundColor = colors[typeKey]
