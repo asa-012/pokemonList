@@ -229,9 +229,10 @@ const getPokemon = async (id, isShow) => {
             }
         }
         //取得した文字列を２行にするために文字列を２つに分け<br>を入れて改行している
-        const description1Line = description.slice(0, 21)
+        const descriptionNoSpace = description.replace(/\s+/g, "")
+        const description1Line = descriptionNoSpace.slice(0, 15)
         const add = '<br>'
-        const description2Line = description.slice(21)
+        const description2Line = descriptionNoSpace.slice(15)
         const descriptionResult = description1Line + add + description2Line
             createPokemonCard(id, name, image, typeJP, typeEN ,species, descriptionResult, isShow)
     }
