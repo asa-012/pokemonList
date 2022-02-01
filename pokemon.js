@@ -141,10 +141,11 @@ function outsideClose(e) {
  */
 function togglePokemonDetailModal(id,name,image,imageBack,type,typeKey,species,description){
     modalName.innerHTML = name
-    modalImage.innerHTML = `
-<img src=${image} alt="">
-<img src=${imageBack} alt="">
-`
+    if(imageBack !== null) {
+        modalImage.innerHTML = `<img src=${image} alt=""><img src=${imageBack} alt="">`
+    }else{
+        modalImage.innerHTML = `<img src=${image} alt="">`
+    }
     modalId.innerHTML = "#" + id
     modalType.innerHTML = type
     modalSpecies.innerHTML = species
