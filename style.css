@@ -58,7 +58,6 @@ li {
 
 .modal_type {
     margin-top: 4px;
-    margin-bottom: 4px;
     text-align: center;
     font-size: 12px;
 }
@@ -212,24 +211,15 @@ li {
     font-size: 0.8em;
 }
 
-.modal_id {
-    background-color: rgba(0, 0, 0, 0.1);
-    padding: 5px 10px;
-    border-radius: 10px;
-    font-size: 0.8em;
-}
-
-.center {
-    text-align: center;
-}
-
 .pokemon .info .name {
     margin: 15px 0 7px;
     letter-spacing: 1px;
 }
 
-.description {
+.modal_description {
     text-align: center;
+    margin-top: 1em;
+    margin-bottom: 1em;
 }
 
 /*loading*/
@@ -342,6 +332,8 @@ li {
 .modal_name {
     font-size: 20px;
     text-align: center;
+    margin-top: 20px;
+    margin-bottom: 10px;
 }
 
 .modal_image {
@@ -351,4 +343,16 @@ li {
 
 .modal_padding {
     padding: 9px 15px;
+}
+
+.modal_id {
+    background-color: rgba(0, 0, 0, 0.1);
+    padding: 5px 10px;
+    border-radius: 10px;
+    font-size: 0.8em;
+    margin-top: -4px;
+}
+
+.center {
+    text-align: center;
 }
