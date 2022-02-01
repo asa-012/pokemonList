@@ -221,7 +221,7 @@ const getPokemon = async (id, isShow) => {
         const add = '<br>'
         const description2Line = description.slice(21)
         const descriptionResult = description1Line + add + description2Line
-            createPokemonCard(id, name, image, typeJP, typeEN ,species, description, isShow)
+            createPokemonCard(id, name, image, typeJP, typeEN ,species, descriptionResult, isShow)
     }
 }
 
