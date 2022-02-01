@@ -17,6 +17,7 @@ const imageFinishScoreContainer = document.getElementById("image_finish_score")
 const gameFinishPokemonCountText = document.getElementById("text_image_finish_score")
 
 const modal = document.getElementById('easyModal');
+const modalContent = document.getElementById('modal_content')
 const buttonClose = document.getElementsByClassName('modalClose')[0];
 const modalImage = document.getElementById('modal_image');
 const modalId = document.getElementById('modal_id');
@@ -136,6 +137,7 @@ function togglePokemonDetailModal(id,name,image,type,typeKey,species,description
     modalType.innerHTML = type
     modalSpecies.innerHTML = species
     modalDescription.innerHTML = description
+    modalContent.style.backgroundColor = colors[typeKey]
 
     modal.style.display = 'block';
 }
