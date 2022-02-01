@@ -151,7 +151,9 @@ function togglePokemonDetailModal(id,name,image,imageBack,type,typeKey,species,d
     modalDescription.innerHTML = description
     modalContent.style.backgroundColor = colors[typeKey]
 
-    modal.style.display = 'block';
+    window.setTimeout(()=>{
+        modal.style.display = 'block';
+    }, 400);
 }
 
 /**
