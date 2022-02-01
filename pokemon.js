@@ -178,6 +178,7 @@ const getPokemon = async (id, isShow) => {
         let description = ''
         //漢字が含まれるか判定
         let regexp = /([\u{3005}\u{3007}\u{303b}\u{3400}-\u{9FFF}\u{F900}-\u{FAFF}\u{20000}-\u{2FFFF}][\u{E0100}-\u{E01EF}\u{FE00}-\u{FE02}]?)/mu;
+        //HACK:動作改善のためにdataName.flavor_text_entries.lengthではなく定数30を使っている
         for(let i=0;i<30;i++){
             //日本語で漢字の入ったものを取得する
             if(dataName.flavor_text_entries[i].language['name'] === "ja"){
