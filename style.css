@@ -308,18 +308,9 @@ li {
     to {opacity: 1}
 }
 
-.modal-header h1 {
-    margin: 1rem 0;
-}
-
-.modal-header {
-    padding: 9px 15px;
-    display: flex;
-    justify-content: space-between;
-}
-
 .modalClose {
     font-size: 2rem;
+    float: right;
 }
 
 .modalClose:hover {
@@ -327,12 +318,24 @@ li {
 }
 
 .modal-body {
-    padding: 10px 20px;
     color: black;
 }
 
 .modal_name {
     font-size: 20px;
-    margin-left: 20px;
     text-align: center;
+    margin-top: -8px;
+}
+
+.modal_image {
+    text-align: center;
+}
+
+.modal_padding {
+    padding: 9px 15px;
+}
+
+.modal_button {
+    font-size: 20px;
+    align-content: center;
 }
