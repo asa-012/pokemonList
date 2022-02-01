@@ -16,6 +16,9 @@ const gameFinishRegisterText = document.getElementById("text_finish_register")
 const imageFinishScoreContainer = document.getElementById("image_finish_score")
 const gameFinishPokemonCountText = document.getElementById("text_image_finish_score")
 
+const modal = document.getElementById('easyModal');
+const buttonClose = document.getElementsByClassName('modalClose')[0];
+
 const header = document.getElementById('header')
 
 // 定数を定義 表示するポケモンidのMax数
@@ -101,6 +104,27 @@ gameField.style.display = "none"
 gameFinishField.style.display = "none"
 gameFinishRegisterText.style.display = "none"
 imageFinishScoreContainer.style.display = "none"
+
+//モーダルのばつがクリックされた時
+buttonClose.addEventListener('click', modalClose);
+function modalClose() {
+    modal.style.display = 'none';
+}
+
+//モーダル背景がクリックされた時
+addEventListener('click', outsideClose);
+function outsideClose(e) {
+    if (e.target === modal) {
+        modal.style.display = 'none';
+    }
+}
+
+/**
+ * modalを出現させます
+ */
+function toggleModal(){
+    modal.style.display = 'block';
+}
 
 /**
  * WebStorageを取得します
@@ -208,6 +232,7 @@ const createPokemonCard = (id , name , image , type ,typeKey , species, descript
     const pokemonEl = document.createElement('div')
     // pokemonクラスを追加
     pokemonEl.classList.add('pokemon')
+    pokemonEl.addEventListener('click', toggleModal);
     // ポケモンの背景色を設定
     pokemonEl.style.backgroundColor = colors[typeKey]
 
