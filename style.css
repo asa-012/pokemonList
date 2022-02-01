@@ -337,5 +337,8 @@ li {
 
 .modal_button {
     font-size: 20px;
-    align-content: center;
+}
+
+.modal_button_wrapper {
+    text-align: center;
 }
