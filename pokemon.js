@@ -133,12 +133,12 @@ function outsideClose(e) {
  * @param name
  * @param image
  * @param imageBack
- * @param typeList
- * @param typeKeyList
+ * @param allTypeName
+ * @param typeKey
  * @param species
  * @param description
  */
-function togglePokemonDetailModal(id,name,image,imageBack,typeList,typeKeyList,species,description){
+function togglePokemonDetailModal(id,name,image,imageBack,allTypeName,typeKey,species,description){
     modalName.innerHTML = name
     if(imageBack !== null) {
         modalImage.innerHTML = `<img src=${image} alt=""><img src=${imageBack} alt="">`
@@ -146,18 +146,10 @@ function togglePokemonDetailModal(id,name,image,imageBack,typeList,typeKeyList,s
         modalImage.innerHTML = `<img src=${image} alt="">`
     }
     modalId.innerHTML = "#" + id
-    let allType = ""
-    for (let i=0;i<typeList.length;i++){
-        if(i === 0) {
-            allType = typeList[i]
-        }else{
-            allType += "・" + typeList[i]
-        }
-    }
-    modalType.innerHTML = allType
+    modalType.innerHTML = allTypeName
     modalSpecies.innerHTML = species
     modalDescription.innerHTML = description
-    modalContent.style.backgroundColor = colors[typeKeyList[0]]
+    modalContent.style.backgroundColor = colors[typeKey]
 
     window.setTimeout(()=>{
         modal.style.display = 'block';
@@ -283,8 +275,16 @@ const createPokemonCard = (id , name , image , imageBack , typeList ,typeENKeyLi
     const pokemonEl = document.createElement('div')
     // pokemonクラスを追加
     pokemonEl.classList.add('pokemon')
+    let allTypeName = ""
+    for (let i=0;i<typeList.length;i++){
+        if(i === 0) {
+            allTypeName = typeList[i]
+        }else{
+            allTypeName += "・" + typeList[i]
+        }
+    }
     pokemonEl.addEventListener('click', () => {
-        togglePokemonDetailModal(id,name,image,imageBack,typeList,typeENKeyList,species,description)
+        togglePokemonDetailModal(id,name,image,imageBack,allTypeName,typeENKeyList[0],species,description)
     });
     // ポケモンの背景色を設定
     pokemonEl.style.backgroundColor = colors[typeENKeyList[0]]
@@ -295,7 +295,7 @@ const createPokemonCard = (id , name , image , imageBack , typeList ,typeENKeyLi
         </div>
     <div class="info">
         <h3 class="name">${name}</h3>
-        <small class="type"><span>${typeList[0]}</span>タイプ</small>
+        <small class="type"><span>${allTypeName}</span>タイプ</small>
     </div>
     `
 
