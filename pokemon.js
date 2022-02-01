@@ -130,8 +130,13 @@ function outsideClose(e) {
  * modalを出現させます
  */
 function togglePokemonDetailModal(id,name,image,type,typeKey,species,description){
-    modalName.innerText = name
+    modalName.innerHTML = name
     modalImage.innerHTML = `<img src=${image} alt="">`
+    modalId.innerHTML = "#" + id
+    modalType.innerHTML = type
+    modalSpecies.innerHTML = species
+    modalDescription.innerHTML = description
+
     modal.style.display = 'block';
 }
 
