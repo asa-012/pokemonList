@@ -16,6 +16,17 @@ const gameFinishRegisterText = document.getElementById("text_finish_register")
 const imageFinishScoreContainer = document.getElementById("image_finish_score")
 const gameFinishPokemonCountText = document.getElementById("text_image_finish_score")
 
+const modal = document.getElementById('easyModal');
+const modalContent = document.getElementById('modal_content')
+const buttonClose = document.getElementsByClassName('modalClose')[0];
+const modalImage = document.getElementById('modal_image');
+const modalId = document.getElementById('modal_id');
+const modalName = document.getElementById('modal_name');
+const modalType = document.getElementById('modal_type');
+const modalSpecies = document.getElementById('modal_species');
+const modalDescription = document.getElementById('modal_description');
+
+
 const header = document.getElementById('header')
 
 // 定数を定義 表示するポケモンidのMax数
@@ -102,6 +113,49 @@ gameFinishField.style.display = "none"
 gameFinishRegisterText.style.display = "none"
 imageFinishScoreContainer.style.display = "none"
 
+//モーダルのばつがクリックされた時
+buttonClose.addEventListener('click', modalClose);
+function modalClose() {
+    modal.style.display = 'none';
+}
+
+//モーダル背景がクリックされた時
+addEventListener('click', outsideClose);
+function outsideClose(e) {
+    if (e.target === modal) {
+        modal.style.display = 'none';
+    }
+}
+
+/**
+ * modalを表示します
+ * @param id
+ * @param name
+ * @param image
+ * @param imageBack
+ * @param allTypeName
+ * @param typeKey
+ * @param species
+ * @param description
+ */
+function togglePokemonDetailModal(id,name,image,imageBack,allTypeName,typeKey,species,description){
+    modalName.innerHTML = name
+    if(imageBack !== null) {
+        modalImage.innerHTML = `<img src=${image} alt=""><img src=${imageBack} alt="">`
+    }else{
+        modalImage.innerHTML = `<img src=${image} alt="">`
+    }
+    modalId.innerHTML = "#" + id
+    modalType.innerHTML = allTypeName
+    modalSpecies.innerHTML = species
+    modalDescription.innerHTML = description
+    modalContent.style.backgroundColor = colors[typeKey]
+
+    window.setTimeout(()=>{
+        modal.style.display = 'block';
+    }, 400);
+}
+
 /**
  * WebStorageを取得します
  * @returns {Promise<void>}
@@ -170,9 +224,15 @@ const getPokemon = async (id, isShow) => {
         const resTypeAndImage = await fetch(urlTypeAndImage)
         const dataTypeAndImage = await resTypeAndImage.json()
 
+        let typeENList = []
+        let typeJPList = []
         const name = dataName.names[0].name
-        const typeEN = main_types.find(type => dataTypeAndImage.types.map(type => type.type.name).indexOf(type) > -1)
-        const typeJP = typeEnToJp[typeEN]
+        for(let i=0;i<dataTypeAndImage.types.length;i++){
+            const typeName = dataTypeAndImage.types[i].type['name']
+            typeENList.push(typeName)
+            typeJPList.push(typeEnToJp[typeName])
+        }
+        const imageBack = dataTypeAndImage.sprites['back_default']
         const image = dataTypeAndImage.sprites['front_default']
         const species = dataName.genera[0].genus
         let description = ''
@@ -188,7 +248,13 @@ const getPokemon = async (id, isShow) => {
                 }
             }
         }
-            createPokemonCard(id, name, image, typeJP, typeEN ,species, description, isShow)
+        //取得した文字列を２行にするために文字列を２つに分け<br>を入れて改行している
+        const descriptionNoSpace = description.replace(/\s+/g, "")
+        const description1Line = descriptionNoSpace.slice(0, 15)
+        const add = '<br>'
+        const description2Line = descriptionNoSpace.slice(15)
+        const descriptionResult = description1Line + add + description2Line
+            createPokemonCard(id, name, image, imageBack, typeJPList, typeENList ,species, descriptionResult, isShow)
     }
 }
 
@@ -197,39 +263,54 @@ const getPokemon = async (id, isShow) => {
  * @param id
  * @param name
  * @param image
- * @param type
- * @param typeKey
+ * @param imageBack
+ * @param typeList
+ * @param typeENKeyList
  * @param species
  * @param description
  * @param isShow
  */
-const createPokemonCard = (id , name , image , type ,typeKey , species, description, isShow) => {
+const createPokemonCard = (id , name , image , imageBack , typeList ,typeENKeyList , species, description, isShow) => {
     // div要素を作成
     const pokemonEl = document.createElement('div')
     // pokemonクラスを追加
     pokemonEl.classList.add('pokemon')
+    let allTypeName = ""
+    for (let i=0;i<typeList.length;i++){
+        if(i === 0) {
+            allTypeName = typeList[i]
+        }else{
+            allTypeName += "・" + typeList[i]
+        }
+    }
+    pokemonEl.addEventListener('click', () => {
+        togglePokemonDetailModal(id,name,image,imageBack,allTypeName,typeENKeyList[0],species,description)
+    });
     // ポケモンの背景色を設定
-    pokemonEl.style.backgroundColor = colors[typeKey]
-
-    //取得した文字列を２行にするために文字列を２つに分け<br>を入れて改行している
-    const description1Line = description.slice(0, 21)
-    const add = '<br>'
-    const description2Line = description.slice(21)
-    const descriptionResult = description1Line + add + description2Line
+    pokemonEl.style.backgroundColor = colors[typeENKeyList[0]]
 
     pokemonEl.innerHTML = `
     <div class="img-container">
         <img src=${image} alt="">
         </div>
     <div class="info">
-        <span class="number">#${id}</span>
         <h3 class="name">${name}</h3>
-        <small class="type"><span>${type}</span>タイプ</small>
-        <br>
-        <small class="type">${species}</small>
-        <p class="description">${descriptionResult}</p>
+        <small class="type"><span>${allTypeName}</span>タイプ</small>
     </div>
     `
+
+    /*
+    *     <div class="img-container">
+        <img src=${image} alt="">
+        </div>
+    <div class="info">
+        <span class="number">#${id}</span>
+        <h3 class="name">${name}</h3>
+        <small class="typeList"><span>${typeList}</span>タイプ</small>
+        <br>
+        <small class="typeList">${species}</small>
+        <p class="description">${descriptionResult}</p>
+    </div>*/
 
     if (isShow) {
         // poke_containerの子要素として追加

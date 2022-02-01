@@ -56,9 +56,17 @@ li {
     font-size: 40px;
 }
 
-.type {
+.modal_type {
+    margin-top: 4px;
+    text-align: center;
+    font-size: 12px;
+}
+
+.modal_species {
     margin-top: 4px;
     margin-bottom: 4px;
+    text-align: center;
+    font-size: 12px;
 }
 
 /*game*/
@@ -160,13 +168,13 @@ li {
 .poke-container {
     justify-content: center;
     margin: 0 auto;
-    max-width: 1200px;
+    max-width: 60%;
 }
 
 .poke-container-background {
     justify-content: center;
     margin: 0 auto;
-    max-width: 1200px;
+    max-width: 60%;
 }
 
 .pokemon {
@@ -208,8 +216,10 @@ li {
     letter-spacing: 1px;
 }
 
-.description {
+.modal_description {
     text-align: center;
+    margin-top: 1em;
+    margin-bottom: 1em;
 }
 
 /*loading*/
@@ -279,4 +289,70 @@ li {
     } 100%, 0% {
           transform: scale(1.0);
       }
+}
+
+/*modal*/
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+    background-color: #f4f4f4;
+    margin: 20% auto;
+    width: 45%;
+    box-shadow: 0 5px 8px 0 rgba(0,0,0,0.2),0 7px 20px 0 rgba(0,0,0,0.17);
+    animation-name: modalopen;
+    animation-duration: 1s;
+}
+
+@keyframes modalopen {
+    from {opacity: 0}
+    to {opacity: 1}
+}
+
+.modalClose {
+    font-size: 2rem;
+    float: right;
+}
+
+.modalClose:hover {
+    cursor: pointer;
+}
+
+.modal-body {
+    color: black;
+}
+
+.modal_name {
+    font-size: 20px;
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.modal_image {
+    text-align: center;
+    padding-left: 20px;
+}
+
+.modal_padding {
+    padding: 9px 15px;
+}
+
+.modal_id {
+    background-color: rgba(0, 0, 0, 0.1);
+    padding: 5px 10px;
+    border-radius: 10px;
+    font-size: 0.8em;
+    margin-top: -4px;
+}
+
+.center {
+    text-align: center;
 }

@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://use.fontawesome.com/releases/v5.0.8/css/all.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css" />
     <title>GET POKEMON</title>
 </head>
@@ -27,6 +28,23 @@
     <div class="sk-chase-dot"></div>
     <div class="sk-chase-dot"></div>
     <div class="sk-chase-dot"></div>
+</div>
+
+<!--modal-->
+<div id="easyModal" class="modal">
+    <div class="modal-content" id="modal_content">
+        <div class="modal_padding">
+        <span class="modalClose">×</span>
+        <div class="modal-body">
+            <div id="modal_image" class="modal_image"></div>
+            <div class="center"><span class="modal_id" id="modal_id">#${id}</span></div>
+            <h2 id="modal_name" class="modal_name"></h2>
+            <div class="modal_type"><span id="modal_type"></span>タイプ</div>
+            <div class="modal_species" id="modal_species">${species}</div>
+            <div class="modal_description" id="modal_description">${descriptionResult}</div>
+        </div>
+        </div>
+    </div>
 </div>
 
 <div class="scroll_area_pokemon_list" id="scroll_area_pokemon_list">
