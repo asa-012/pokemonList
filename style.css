@@ -169,13 +169,13 @@ li {
 .poke-container {
     justify-content: center;
     margin: 0 auto;
-    max-width: 1000px;
+    max-width: 60%;
 }
 
 .poke-container-background {
     justify-content: center;
     margin: 0 auto;
-    max-width: 1000px;
+    max-width: 60%;
 }
 
 .pokemon {
