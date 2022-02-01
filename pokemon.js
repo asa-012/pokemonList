@@ -18,6 +18,8 @@ const gameFinishPokemonCountText = document.getElementById("text_image_finish_sc
 
 const modal = document.getElementById('easyModal');
 const buttonClose = document.getElementsByClassName('modalClose')[0];
+const modalImage = document.getElementById('modal_image');
+const modalName = document.getElementById('modal_name');
 
 const header = document.getElementById('header')
 
@@ -122,7 +124,9 @@ function outsideClose(e) {
 /**
  * modalを出現させます
  */
-function toggleModal(){
+function toggleModal(name,image){
+    modalName.innerText = name
+    modalImage.innerHTML = `<img src=${image} alt="">`
     modal.style.display = 'block';
 }
 
@@ -232,7 +236,9 @@ const createPokemonCard = (id , name , image , type ,typeKey , species, descript
     const pokemonEl = document.createElement('div')
     // pokemonクラスを追加
     pokemonEl.classList.add('pokemon')
-    pokemonEl.addEventListener('click', toggleModal);
+    pokemonEl.addEventListener('click', () => {
+        toggleModal(name,image)
+    });
     // ポケモンの背景色を設定
     pokemonEl.style.backgroundColor = colors[typeKey]
 

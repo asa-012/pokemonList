@@ -313,8 +313,7 @@ li {
 }
 
 .modal-header {
-    background: lightblue;
-    padding: 3px 15px;
+    padding: 9px 15px;
     display: flex;
     justify-content: space-between;
 }
