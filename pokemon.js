@@ -73,8 +73,8 @@ const colors = {
     steel: '#ffffff',
     ice: '#faebd7',
     dark: '#483d8b',
-    unknown:'#b8860b',
-    shadow:'#696969'
+    unknown: '#b8860b',
+    shadow: '#696969'
 };
 
 const typeEnToJp = {
@@ -96,8 +96,8 @@ const typeEnToJp = {
     steel: 'はがね',
     ice: 'こおり',
     dark: 'あく',
-    unknown:'???',
-    shadow:'ダーク'
+    unknown: '???',
+    shadow: 'ダーク'
 };
 
 // noneで非表示 blockで表示
@@ -113,12 +113,14 @@ imageFinishScoreContainer.style.display = "none";
 
 //モーダルのばつがクリックされた時
 buttonClose.addEventListener('click', modalClose);
+
 function modalClose() {
     modal.style.display = 'none';
 }
 
 //モーダル背景がクリックされた時
 addEventListener('click', outsideClose);
+
 function outsideClose(e) {
     if (e.target === modal) {
         modal.style.display = 'none';
@@ -136,11 +138,11 @@ function outsideClose(e) {
  * @param species
  * @param description
  */
-function togglePokemonDetailModal(id,name,image,imageBack,allTypeName,typeKey,species,description){
+function togglePokemonDetailModal(id, name, image, imageBack, allTypeName, typeKey, species, description) {
     modalName.innerHTML = name;
-    if(imageBack !== null) {
+    if (imageBack !== null) {
         modalImage.innerHTML = `<img src=${image} alt=""><img src=${imageBack} alt="">`;
-    }else{
+    } else {
         modalImage.innerHTML = `<img src=${image} alt="">`;
     }
     modalId.innerHTML = "#" + id;
@@ -149,7 +151,7 @@ function togglePokemonDetailModal(id,name,image,imageBack,allTypeName,typeKey,sp
     modalDescription.innerHTML = description;
     modalContent.style.backgroundColor = colors[typeKey];
 
-    window.setTimeout(()=>{
+    window.setTimeout(() => {
         modal.style.display = 'block';
     }, 400);
 }
@@ -168,7 +170,7 @@ async function getWebStorage() {
  */
 const fetchAllPokemonImage = async () => {
     for (let i = 1; i <= pokemon_count; i++) {
-            await getPokemonAllImage(i);
+        await getPokemonAllImage(i);
     }
 }
 
@@ -177,13 +179,13 @@ const fetchAllPokemonImage = async () => {
  * @returns {Promise<void>}
  */
 const fetchPokemons = async () => {
-    if(clickedPokemonIdsOnStorage != null) {
+    if (clickedPokemonIdsOnStorage != null) {
         for (let i = 0; i <= clickedPokemonIdsOnStorage.length; i++) {
             if (i <= pokemon_max_loading_count + 1) {
                 await getPokemon(clickedPokemonIdsOnStorage[i], true);
                 if (i === pokemon_max_loading_count) {
                     scrollToBottom();
-                }else if (i === clickedPokemonIdsOnStorage.length){
+                } else if (i === clickedPokemonIdsOnStorage.length) {
                     mainLoading.style.display = "none";
                     pokeContainer.style.display = "block";
                 }
@@ -194,7 +196,7 @@ const fetchPokemons = async () => {
                 await getPokemon(clickedPokemonIdsOnStorage[i], false);
             }
         }
-    }else{
+    } else {
         mainLoading.style.display = "none";
         pokeContainer.style.display = "block";
         textNoPokemon.style.display = "block";
@@ -203,7 +205,7 @@ const fetchPokemons = async () => {
 }
 
 const getPokemonAllImage = async (id) => {
-    if(id !== undefined) {
+    if (id !== undefined) {
         const url = `https://pokeapi.co/api/v2/pokemon/${id}`;
         const res = await fetch(url);
         const data = await res.json();
@@ -212,7 +214,7 @@ const getPokemonAllImage = async (id) => {
 }
 
 const getPokemon = async (id, isShow) => {
-    if(id !== undefined) {
+    if (id !== undefined) {
         const urlName = `https://pokeapi.co/api/v2/pokemon-species/${id}`;
         const urlTypeAndImage = `https://pokeapi.co/api/v2/pokemon/${id}`;
 
@@ -225,7 +227,7 @@ const getPokemon = async (id, isShow) => {
         let typeENList = [];
         let typeJPList = [];
         const name = dataName.names[0].name;
-        for(let i=0;i<dataTypeAndImage.types.length;i++){
+        for (let i = 0; i < dataTypeAndImage.types.length; i++) {
             const typeName = dataTypeAndImage.types[i].type['name'];
             typeENList.push(typeName);
             typeJPList.push(typeEnToJp[typeName]);
@@ -237,10 +239,10 @@ const getPokemon = async (id, isShow) => {
         //漢字が含まれるか判定
         let regexp = /([\u{3005}\u{3007}\u{303b}\u{3400}-\u{9FFF}\u{F900}-\u{FAFF}\u{20000}-\u{2FFFF}][\u{E0100}-\u{E01EF}\u{FE00}-\u{FE02}]?)/mu;
         //HACK:動作改善のためにdataName.flavor_text_entries.lengthではなく定数30を使っている
-        for(let i=0;i<30;i++){
+        for (let i = 0; i < 30; i++) {
             //日本語で漢字の入ったものを取得する
-            if(dataName.flavor_text_entries[i].language['name'] === "ja"){
-                if(regexp.test(dataName.flavor_text_entries[i].flavor_text)) {
+            if (dataName.flavor_text_entries[i].language['name'] === "ja") {
+                if (regexp.test(dataName.flavor_text_entries[i].flavor_text)) {
                     description = dataName.flavor_text_entries[i].flavor_text;
                     break
                 }
@@ -252,7 +254,7 @@ const getPokemon = async (id, isShow) => {
         const add = '<br>';
         const description2Line = descriptionNoSpace.slice(15);
         const descriptionResult = description1Line + add + description2Line;
-            createPokemonCard(id, name, image, imageBack, typeJPList, typeENList ,species, descriptionResult, isShow);
+        createPokemonCard(id, name, image, imageBack, typeJPList, typeENList, species, descriptionResult, isShow);
     }
 }
 
@@ -268,21 +270,21 @@ const getPokemon = async (id, isShow) => {
  * @param description
  * @param isShow
  */
-const createPokemonCard = (id , name , image , imageBack , typeList ,typeENKeyList , species, description, isShow) => {
+const createPokemonCard = (id, name, image, imageBack, typeList, typeENKeyList, species, description, isShow) => {
     // div要素を作成
     const pokemonEl = document.createElement('div');
     // pokemonクラスを追加
     pokemonEl.classList.add('pokemon');
     let allTypeName = "";
-    for (let i=0;i<typeList.length;i++){
-        if(i === 0) {
+    for (let i = 0; i < typeList.length; i++) {
+        if (i === 0) {
             allTypeName = typeList[i];
-        }else{
+        } else {
             allTypeName += "・" + typeList[i];
         }
     }
     pokemonEl.addEventListener('click', () => {
-        togglePokemonDetailModal(id,name,image,imageBack,allTypeName,typeENKeyList[0],species,description);
+        togglePokemonDetailModal(id, name, image, imageBack, allTypeName, typeENKeyList[0], species, description);
     });
     // ポケモンの背景色を設定
     pokemonEl.style.backgroundColor = colors[typeENKeyList[0]];
@@ -363,7 +365,7 @@ function onClickGameStart() {
     displayPokemonIds = [];
     clickedPokemonIdsOnStorage = JSON.parse(localStorage.getItem(KEY_CLICKED_POKEMON));
 
-    for (let i = 0;i<maxDisplayPokemonGameCount ;i++){
+    for (let i = 0; i < maxDisplayPokemonGameCount; i++) {
         //ポケモンは被っても良いとする
         const id = Math.floor(Math.random() * pokemon_count);
         displayPokemonIds.push(id);
@@ -377,8 +379,8 @@ function onClickGameStart() {
  * クリックしたポケモンをhide状態にします
  * @param id
  */
-function onClickPokemon(id){
-    if(id != null) {
+function onClickPokemon(id) {
+    if (id != null) {
         clickedPokemonIds.push(id);
         document.getElementById(id).style.display = "none";
     }
@@ -400,59 +402,59 @@ function startShowingCounter() {
  * 残り時間０になった時に終了画面に遷移し、タイマーのInterval処理を削除します
  */
 function showCount() {
-        const restTime = maxCountSecond - passSec - 1;
-        if (restTime === 0) {
-            clearInterval(COUNTER_GAME_MAIN);
-            //Result画面へ
-            gameCountAndFinishText.innerHTML = "終了";
-            gameField.style.display = "none";
-            gameFinishField.style.display = "block";
-            let result;
-            if (clickedPokemonIdsOnStorage != null) {
-                //順番を新しい順にするため
-                result = clickedPokemonIdsOnStorage.reverse().concat(clickedPokemonIds);
-                result.reverse();
-                //元に戻しておく
-                clickedPokemonIdsOnStorage.reverse();
-            } else {
-                result = clickedPokemonIds;
-            }
-            const clickedPokemonIdsJson = JSON.stringify(result);
-            localStorage.setItem(KEY_CLICKED_POKEMON, clickedPokemonIdsJson);
-            //タイマーをセット
-            COUNTER_GAME_FINISH = setInterval('finishGameFlow()', 1500);
+    const restTime = maxCountSecond - passSec - 1;
+    if (restTime === 0) {
+        clearInterval(COUNTER_GAME_MAIN);
+        //Result画面へ
+        gameCountAndFinishText.innerHTML = "終了";
+        gameField.style.display = "none";
+        gameFinishField.style.display = "block";
+        let result;
+        if (clickedPokemonIdsOnStorage != null) {
+            //順番を新しい順にするため
+            result = clickedPokemonIdsOnStorage.reverse().concat(clickedPokemonIds);
+            result.reverse();
+            //元に戻しておく
+            clickedPokemonIdsOnStorage.reverse();
         } else {
-            //カウントアップ
-            passSec += countUpInterval;
-            showRandomImages025s();
-            if (Number.isInteger(passSec - countUpInterval)) gameCountAndFinishText.innerHTML = "残り時間：" + restTime + "秒";
+            result = clickedPokemonIds;
         }
+        const clickedPokemonIdsJson = JSON.stringify(result);
+        localStorage.setItem(KEY_CLICKED_POKEMON, clickedPokemonIdsJson);
+        //タイマーをセット
+        COUNTER_GAME_FINISH = setInterval('finishGameFlow()', 1500);
+    } else {
+        //カウントアップ
+        passSec += countUpInterval;
+        showRandomImages025s();
+        if (Number.isInteger(passSec - countUpInterval)) gameCountAndFinishText.innerHTML = "残り時間：" + restTime + "秒";
+    }
 }
 
 /**
  * ゲーム終了時に1.5秒ごとにそれぞれ処理が実施されます
  * これにより擬似アニメーションを作成しています
  */
-function finishGameFlow(){
+function finishGameFlow() {
     //HACK:SetInterval内ではinnerHTMLを書き換えることはできない仕様となっているからvisibleで文字列を変える　
     finishGameFlowIntervalCount++;
-    if(finishGameFlowIntervalCount === 1){
+    if (finishGameFlowIntervalCount === 1) {
         gameFinishText.style.display = "none";
         gameFinishField.style.display = "none";
         mainLoading.style.display = 'block';
         finishGamePokemonImage();
-    }else if(finishGameFlowIntervalCount === 2){
+    } else if (finishGameFlowIntervalCount === 2) {
         mainLoading.style.display = "none";
         gameFinishField.style.display = "block";
         imageFinishScoreContainer.style.display = "block";
-    }else if(finishGameFlowIntervalCount === 4){
+    } else if (finishGameFlowIntervalCount === 4) {
         imageFinishScoreContainer.style.display = "none";
         gameFinishRegisterText.style.display = "block";
-    }else if(finishGameFlowIntervalCount === 5){
+    } else if (finishGameFlowIntervalCount === 5) {
         gameFinishRegisterText.style.display = "none";
         gameFinishField.style.display = "none";
         mainLoading.style.display = "block";
-    }else if(finishGameFlowIntervalCount === 6){
+    } else if (finishGameFlowIntervalCount === 6) {
         clearInterval(COUNTER_GAME_FINISH);
         onClickPokemonList();
     }
@@ -462,19 +464,19 @@ function finishGameFlow(){
  * 0.25秒に一回ポケモン画像を表示させる関数です
  */
 
-function showRandomImages025s(){
+function showRandomImages025s() {
     // div要素を作成
     const divPokemonRandomImage = document.createElement('div');
-    const pokemonImageIndex = 2 * ((passSec * 4) -1);
+    const pokemonImageIndex = 2 * ((passSec * 4) - 1);
     const displayPokemonId = displayPokemonIds[pokemonImageIndex];
-    const displayPokemonImage = pokemonImages[displayPokemonId -1];
+    const displayPokemonImage = pokemonImages[displayPokemonId - 1];
 
     //縦横軸用の乱数生成
     const x = Math.floor(Math.random() * 94);
     const y = Math.floor(Math.random() * 94);
 
     //追加したdiv要素にimgタグを追加（乱数を代入した変数をポジションに設定)
-    divPokemonRandomImage.innerHTML = '<img id="' + displayPokemonId + '" src="' + displayPokemonImage + '" onclick="onClickPokemon(' + displayPokemonId + ')" alt="" style="top:'+y+'%; left:'+x+'%;">';
+    divPokemonRandomImage.innerHTML = '<img id="' + displayPokemonId + '" src="' + displayPokemonImage + '" onclick="onClickPokemon(' + displayPokemonId + ')" alt="" style="top:' + y + '%; left:' + x + '%;">';
     gameField.appendChild(divPokemonRandomImage);
 }
 
@@ -494,21 +496,23 @@ function finishGamePokemonImage() {
             const multiple = Math.floor(i / 10) + 1;
             let x = 0;
             const y = multiple * 20;
-            if(multiple < 2) {
+            if (multiple < 2) {
                 x = 10 * (i % 10);
-            }else{
-                x = 10 * (i % 10) -10;
+            } else {
+                x = 10 * (i % 10) - 10;
             }
-            divPokemonImage.innerHTML += '<img src="' + pokemonImages[result[i]-1] + '" alt="" style="top:' + y + '%; left:' + x + '%;">';
+            divPokemonImage.innerHTML += '<img src="' + pokemonImages[result[i] - 1] + '" alt="" style="top:' + y + '%; left:' + x + '%;">';
         }
-        if(result.length !== 0){
-            gameFinishPokemonCountText.innerHTML = 'ポケモンを'+ result.length + '匹捕まえました.<br><br>画像は以下の通りです';
-        }else{
+        if (result.length !== 0) {
+            gameFinishPokemonCountText.innerHTML = 'ポケモンを' + result.length + '匹捕まえました.<br><br>画像は以下の通りです';
+        } else {
             gameFinishPokemonCountText.innerHTML = 'ポケモンを捕まえることができませんでした.';
         }
         imageFinishScoreContainer.appendChild(divPokemonImage);
     }
 }
 
-getWebStorage().then(_ => {fetchPokemons().then(_ => {})})
+getWebStorage().then(_ => {
+    fetchPokemons().then(_ => {})
+})
 fetchAllPokemonImage().then(_ => {})
