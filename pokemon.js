@@ -46,8 +46,8 @@ let clickedPokemonIdsOnStorage = [];
 // 秒数カウント用変数
 let passSec = 0;
 let COUNTER_GAME_MAIN = -1;
-const maxCountSecond = 10;
-const countUpInterval = 0.25;
+const maxCountSecond = 12;
+const countUpInterval = 0.5;
 
 //gameが終わった後のFlow
 let COUNTER_GAME_FINISH = -1;
