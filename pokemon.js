@@ -351,6 +351,7 @@ function onClickGame() {
     gameField.style.display = 'none';
     gameFinishText.style.text = "block";
     gameFinishRegisterText.style.display = "none";
+    mainLoading.style.display = "none"
 }
 
 /**
